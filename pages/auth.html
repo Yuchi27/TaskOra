@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TMA — Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles/auth.css">
+</head>
+<body>
+
+  <!-- Login -->
+  <div class="card" id="v-login">
+    <div class="dk" style="width:42%">
+      <div class="logo-box">[LOGO]</div>
+      <p class="dk-sub">Don't have an account?</p>
+      <button class="dk-btn" onclick="show('register')">Sign Up</button>
+    </div>
+    <div class="lt" style="width:58%">
+      <h2>Welcome Back!</h2>
+      <div class="fld"><label>Email</label><input type="email" id="li-email" placeholder="e.g Juandelacruz@gmail.com"></div>
+      <div class="fld"><label>Password</label><input type="password" id="li-pass" placeholder="Enter your Password"></div>
+      <div class="row"><input type="checkbox" id="li-rem"><span>Remember me</span></div>
+      <button class="main-btn" onclick="doLogin()">Sign In</button>
+      <div class="msg" id="li-msg"></div>
+      <button class="link" onclick="show('forgot')">Forgot Password?</button>
+    </div>
+  </div>
+
+  <!-- Register -->
+  <div class="card" id="v-register" style="display:none">
+    <div class="lt" style="width:58%;padding:2rem 2.5rem;gap:12px">
+      <div class="fld"><label>Name</label><input type="text" id="rg-name" placeholder="e.g Juan"></div>
+      <div class="fld"><label>Email</label><input type="email" id="rg-email" placeholder="e.g Juandelacruz@gmail.com"></div>
+      <div class="fld"><label>Password</label><input type="password" id="rg-pass" placeholder="Enter your Password"></div>
+      <div class="fld"><label>Confirm Password</label><input type="password" id="rg-pass2" placeholder="Confirm your Password"></div>
+      <button class="main-btn" onclick="doRegister()">Sign up</button>
+      <div class="msg" id="rg-msg"></div>
+    </div>
+    <div class="dk" style="width:42%">
+      <div class="logo-box">[LOGO]</div>
+      <p class="dk-sub">Already have an account?</p>
+      <button class="dk-btn" onclick="show('login')">Sign In</button>
+    </div>
+  </div>
+
+  <!-- Forgot Password -->
+  <div class="card" id="v-forgot" style="display:none">
+    <div class="dk" style="width:42%">
+      <div class="logo-box">[LOGO]</div>
+    </div>
+    <div class="lt" style="width:58%;align-items:center;justify-content:center;gap:14px">
+      <div class="fld" style="width:100%">
+        <label>Enter your email</label>
+        <input type="email" id="fp-email" placeholder="e.g juandelacruz@gmail.com">
+      </div>
+      <button class="main-btn" onclick="doForgot()">Send Reset Link</button>
+      <div class="msg" id="fp-msg"></div>
+      <button class="link" onclick="show('login')" style="font-size:12px;color:#8a9bb0">← Back to Sign In</button>
+    </div>
+  </div>
+
+  <script type="module" src="../scripts/auth.js"></script>
+</body>
+</html>

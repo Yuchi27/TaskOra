@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TMA — Settings</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../styles/main.css">
+  <link rel="stylesheet" href="../styles/settings.css">
+  <link rel="stylesheet" href="../styles/darkmode.css">
+  <script src="../scripts/theme.js"></script>
+</head>
+<body>
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="logo">[LOGO]</div>
+    <div class="page-title">Settings</div>
+    <div class="topbar-right">
+      <button class="notif-btn"><i class="ti ti-bell"></i></button>
+      <div class="avatar"><i class="ti ti-user"></i></div>
+    </div>
+  </div>
+
+  <div class="layout">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <nav>
+        <a href="dashboard.html"><i class="ti ti-layout-dashboard"></i> Dashboard</a>
+        <a href="tasks.html"><i class="ti ti-checkbox"></i> Tasks</a>
+        <a href="calendar.html"><i class="ti ti-calendar"></i> Calendar</a>
+        <a href="schedule.html"><i class="ti ti-star"></i> Schedule</a>
+        <a href="analytics.html"><i class="ti ti-chart-bar"></i> Analytics</a>
+      </nav>
+      <div class="sidebar-bottom">
+        <a href="settings.html" class="active"><i class="ti ti-settings"></i> Settings</a>
+        <a href="help.html"><i class="ti ti-help-circle"></i> Help Center</a>
+        <a href="#" id="logout-btn"><i class="ti ti-logout"></i> Sign out</a>
+      </div>
+      <div class="sidebar-footer">© 2026 — Archie L. Agui Jr.. All rights reserved.</div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+
+      <div class="settings-card">
+        <h3>Profile</h3>
+        <div class="profile-row">
+          <div class="profile-avatar"><i class="ti ti-user"></i></div>
+          <div>
+            <div class="profile-name" id="profile-name">—</div>
+            <div class="profile-email" id="profile-email">—</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="settings-card">
+        <h3>Appearance</h3>
+        <div class="setting-row">
+          <div>
+            <div class="setting-label">Dark Mode</div>
+            <div class="setting-sub">Switch between light and dark theme across the whole app</div>
+          </div>
+          <button class="toggle" id="dark-toggle">
+            <span class="toggle-knob"></span>
+          </button>
+        </div>
+      </div>
+
+      <div class="settings-card">
+        <h3>Account</h3>
+        <div class="setting-row">
+          <div>
+            <div class="setting-label">Sign out</div>
+            <div class="setting-sub">Log out of your TMA account</div>
+          </div>
+          <button class="btn-danger" id="settings-logout-btn">Sign out</button>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script type="module" src="../scripts/settings.js"></script>
+</body>
+</html>

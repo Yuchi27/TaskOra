@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TMA — Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../styles/main.css">
+  <link rel="stylesheet" href="../styles/dashboard.css">
+</head>
+<body>
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="logo">[LOGO]</div>
+    <div class="page-title">Dashboard</div>
+    <div class="topbar-right">
+      <button class="notif-btn"><i class="ti ti-bell"></i></button>
+      <div class="avatar"><i class="ti ti-user"></i></div>
+    </div>
+  </div>
+
+  <div class="layout">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <nav>
+        <a href="dashboard.html" class="active"><i class="ti ti-layout-dashboard"></i> Dashboard</a>
+        <a href="tasks.html"><i class="ti ti-checkbox"></i> Tasks</a>
+        <a href="calendar.html"><i class="ti ti-calendar"></i> Calendar</a>
+        <a href="schedule.html"><i class="ti ti-star"></i> Schedule</a>
+        <a href="analytics.html"><i class="ti ti-chart-bar"></i> Analytics</a>
+      </nav>
+      <div class="sidebar-bottom">
+        <a href="settings.html"><i class="ti ti-settings"></i> Settings</a>
+        <a href="#"><i class="ti ti-help-circle"></i> Help Center</a>
+        <a href="#" id="logout-btn"><i class="ti ti-logout"></i> Sign out</a>
+      </div>
+      <div class="sidebar-footer">© 2026 — Archie L. Agui Jr.. All rights reserved.</div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+      <div class="top-row">
+        <div class="greeting">
+          <h1 id="greeting-text">Good Morning, User!</h1>
+          <p>Let's get you productive today</p>
+        </div>
+        <div class="top-actions">
+          <button onclick="window.location.href='tasks.html'"><i class="ti ti-plus"></i> Add Tasks</button>
+          <button><i class="ti ti-plus"></i> Add Schedules</button>
+          <button onclick="window.location.href='calendar.html'"><i class="ti ti-calendar"></i> Calendar</button>
+        </div>
+      </div>
+
+      <div class="section-title">Task Overview</div>
+
+      <!-- STAT CARDS -->
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-icon purple">📝</div>
+          <div class="stat-info">
+            <label>Total Tasks</label>
+            <div class="stat-num purple" id="total-tasks">0</div>
+            <div class="stat-sub">All task in total</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon orange">⌛</div>
+          <div class="stat-info">
+            <label>Pending</label>
+            <div class="stat-num orange" id="pending-tasks">0</div>
+            <div class="stat-sub">Task to do</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green">✓</div>
+          <div class="stat-info">
+            <label>Completed</label>
+            <div class="stat-num green" id="completed-tasks">0</div>
+            <div class="stat-sub">Task Completed</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon red">🔥</div>
+          <div class="stat-info">
+            <label>High Priority</label>
+            <div class="stat-num red" id="high-tasks">0</div>
+            <div class="stat-sub">Tasks to focus</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANELS -->
+      <div class="panel-grid">
+        <div class="panel">
+          <div class="panel-header">
+            <span><span class="dot yellow"></span> Today's Deadlines</span>
+            <a href="tasks.html">View All</a>
+          </div>
+          <div id="today-deadlines"><p class="panel-empty">No deadlines today</p></div>
+        </div>
+        <div class="panel">
+          <div class="panel-header">
+            <span><span class="dot red"></span> Upcoming Deadlines</span>
+            <a href="tasks.html">View All</a>
+          </div>
+          <div id="upcoming-deadlines"><p class="panel-empty">No upcoming deadlines</p></div>
+        </div>
+        <div class="panel">
+          <div class="panel-header">
+            <span><span class="dot green"></span> Recent Activity</span>
+            <a href="tasks.html">View All</a>
+          </div>
+          <div id="recent-activity"><p class="panel-empty">No recent activity</p></div>
+        </div>
+      </div>
+
+      <!-- BOTTOM -->
+      <div class="bottom-grid">
+        <div class="panel">
+          <div class="panel-header">
+            <span><i class="ti ti-clock" style="color:#6c7fcc"></i> Schedules</span>
+          </div>
+          <div id="schedules-list"><p class="panel-empty">No schedules yet</p></div>
+        </div>
+        <div class="panel light">
+          <div class="panel-header">
+            <span>Quotes</span>
+          </div>
+          <div class="quote-text" id="quote-text">"The secret of getting ahead is getting started."<br><br>— Mark Twain</div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script type="module" src="../scripts/dashboard.js"></script>
+</body>
+</html>

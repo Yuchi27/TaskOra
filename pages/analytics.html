@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TMA — Analytics</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../styles/main.css">
+  <link rel="stylesheet" href="../styles/analytics.css">
+  <link rel="stylesheet" href="../styles/darkmode.css">
+  <script src="../scripts/theme.js"></script>
+</head>
+<body>
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="logo">[LOGO]</div>
+    <div class="page-title">Analytics</div>
+    <div class="topbar-right">
+      <button class="notif-btn"><i class="ti ti-bell"></i></button>
+      <div class="avatar"><i class="ti ti-user"></i></div>
+    </div>
+  </div>
+
+  <div class="layout">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <nav>
+        <a href="dashboard.html"><i class="ti ti-layout-dashboard"></i> Dashboard</a>
+        <a href="tasks.html"><i class="ti ti-checkbox"></i> Tasks</a>
+        <a href="calendar.html"><i class="ti ti-calendar"></i> Calendar</a>
+        <a href="schedule.html"><i class="ti ti-star"></i> Schedule</a>
+        <a href="analytics.html" class="active"><i class="ti ti-chart-bar"></i> Analytics</a>
+      </nav>
+      <div class="sidebar-bottom">
+        <a href="settings.html"><i class="ti ti-settings"></i> Settings</a>
+        <a href="help.html"><i class="ti ti-help-circle"></i> Help Center</a>
+        <a href="#" id="logout-btn"><i class="ti ti-logout"></i> Sign out</a>
+      </div>
+      <div class="sidebar-footer">© 2026 — Archie L. Agui Jr.. All rights reserved.</div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-icon purple">📝</div>
+          <div class="stat-info">
+            <label>Total Tasks</label>
+            <div class="stat-num purple" id="a-total">0</div>
+            <div class="stat-sub">All time</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green"><i class="ti ti-check"></i></div>
+          <div class="stat-info">
+            <label>Completion Rate</label>
+            <div class="stat-num green" id="a-rate">0%</div>
+            <div class="stat-sub">Of all tasks</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon orange">⌛</div>
+          <div class="stat-info">
+            <label>Overdue</label>
+            <div class="stat-num orange" id="a-overdue">0</div>
+            <div class="stat-sub">Past deadline, not done</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon red">🔥</div>
+          <div class="stat-info">
+            <label>High Priority Open</label>
+            <div class="stat-num red" id="a-high">0</div>
+            <div class="stat-sub">Needs focus</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="analytics-grid">
+        <div class="analytics-card">
+          <h3>Tasks by Priority</h3>
+          <div id="priority-bars" class="bar-list"></div>
+        </div>
+
+        <div class="analytics-card">
+          <h3>Tasks by Category</h3>
+          <div id="category-bars" class="bar-list"></div>
+        </div>
+
+        <div class="analytics-card wide">
+          <h3>Completed in the Last 7 Days</h3>
+          <div id="week-chart" class="week-chart"></div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script type="module" src="../scripts/analytics.js"></script>
+</body>
+</html>

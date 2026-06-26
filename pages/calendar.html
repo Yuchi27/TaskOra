@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TMA — My Calendar</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../styles/main.css">
+  <link rel="stylesheet" href="../styles/calendar.css">
+</head>
+<body>
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="logo">[LOGO]</div>
+    <div class="page-title">My Calendar</div>
+    <div class="topbar-right">
+      <button class="notif-btn"><i class="ti ti-bell"></i></button>
+      <div class="avatar"><i class="ti ti-user"></i></div>
+    </div>
+  </div>
+
+  <div class="layout">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <nav>
+        <a href="dashboard.html"><i class="ti ti-layout-dashboard"></i> Dashboard</a>
+        <a href="tasks.html"><i class="ti ti-checkbox"></i> Tasks</a>
+        <a href="calendar.html" class="active"><i class="ti ti-calendar"></i> Calendar</a>
+        <a href="schedule.html"><i class="ti ti-star"></i> Schedule</a>
+        <a href="analytics.html"><i class="ti ti-chart-bar"></i> Analytics</a>
+      </nav>
+      <div class="sidebar-bottom">
+        <a href="settings.html"><i class="ti ti-settings"></i> Settings</a>
+        <a href="#"><i class="ti ti-help-circle"></i> Help Center</a>
+        <a href="#" id="logout-btn"><i class="ti ti-logout"></i> Sign out</a>
+      </div>
+      <div class="sidebar-footer">© 2026 — Archie L. Agui Jr.. All rights reserved.</div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+
+      <div class="cal-toolbar">
+        <button class="nav-btn" id="prev-month"><i class="ti ti-chevron-left"></i></button>
+        <button class="nav-btn" id="next-month"><i class="ti ti-chevron-right"></i></button>
+        <button class="today-btn" id="today-btn">Today</button>
+        <div class="month-label" id="month-label">June 2026</div>
+      </div>
+
+      <div class="cal-body">
+        <div class="cal-grid-wrap">
+          <div class="cal-grid" id="cal-grid">
+            <!-- JS renders headers + day cells -->
+          </div>
+        </div>
+
+        <div class="cal-side">
+          <div class="side-card" id="selected-day-card">
+            <div class="side-date" id="side-date-label">—</div>
+            <div class="side-count" id="side-count-label">0 Tasks</div>
+            <div class="side-list" id="side-list"></div>
+          </div>
+
+          <div class="side-card">
+            <div class="side-title">Upcoming <span class="side-sub">(Next 7 Days)</span></div>
+            <div class="side-count" id="upcoming-count-label">0 Tasks</div>
+            <div class="side-list" id="upcoming-list"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="legend">
+        <span class="legend-item"><span class="dot red"></span> High Priority</span>
+        <span class="legend-item"><span class="dot orange"></span> Medium Priority</span>
+        <span class="legend-item"><span class="dot green"></span> Low Priority</span>
+        <span class="legend-item"><span class="dot blue"></span> Personal</span>
+        <span class="legend-item"><span class="dot dark"></span> Work</span>
+      </div>
+    </main>
+  </div>
+
+  <script type="module" src="../scripts/calendar.js"></script>
+</body>
+</html>

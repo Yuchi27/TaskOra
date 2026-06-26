@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TMA — My Schedule</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../styles/main.css">
+  <link rel="stylesheet" href="../styles/schedule.css">
+</head>
+<body>
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="logo">[LOGO]</div>
+    <div class="page-title">My Schedule</div>
+    <div class="topbar-right">
+      <button class="notif-btn"><i class="ti ti-bell"></i></button>
+      <div class="avatar"><i class="ti ti-user"></i></div>
+    </div>
+  </div>
+
+  <div class="layout">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <nav>
+        <a href="dashboard.html"><i class="ti ti-layout-dashboard"></i> Dashboard</a>
+        <a href="tasks.html"><i class="ti ti-checkbox"></i> Tasks</a>
+        <a href="calendar.html"><i class="ti ti-calendar"></i> Calendar</a>
+        <a href="schedule.html" class="active"><i class="ti ti-star"></i> Schedule</a>
+        <a href="analytics.html"><i class="ti ti-chart-bar"></i> Analytics</a>
+      </nav>
+      <div class="sidebar-bottom">
+        <a href="settings.html"><i class="ti ti-settings"></i> Settings</a>
+        <a href="#"><i class="ti ti-help-circle"></i> Help Center</a>
+        <a href="#" id="logout-btn"><i class="ti ti-logout"></i> Sign out</a>
+      </div>
+      <div class="sidebar-footer">© 2026 — Archie L. Agui Jr.. All rights reserved.</div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+
+      <div class="sched-toolbar">
+        <button class="nav-btn" id="prev-week"><i class="ti ti-chevron-left"></i></button>
+        <button class="nav-btn" id="next-week"><i class="ti ti-chevron-right"></i></button>
+        <div class="week-label" id="week-label">June 22 - June 28, 2026</div>
+        <div class="spacer"></div>
+        <button class="btn-add" id="add-schedule-btn"><i class="ti ti-plus"></i> Add Schedule</button>
+      </div>
+
+      <div class="sched-grid-wrap">
+        <div class="sched-grid" id="sched-grid">
+          <!-- JS renders time column + day columns -->
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- ADD SCHEDULE MODAL -->
+  <div class="modal-overlay" id="schedule-modal">
+    <div class="modal">
+      <h3 id="sched-modal-title">Add Schedule</h3>
+      <div class="fld">
+        <label>Title</label>
+        <input type="text" id="s-title" placeholder="Enter schedule title">
+      </div>
+      <div class="modal-row">
+        <div class="fld">
+          <label>Type</label>
+          <select id="s-category">
+            <option value="Personal">Personal</option>
+            <option value="Work">Work</option>
+          </select>
+        </div>
+        <div class="fld">
+          <label>Date</label>
+          <input type="date" id="s-date">
+        </div>
+      </div>
+      <div class="modal-row">
+        <div class="fld">
+          <label>Start Time</label>
+          <input type="time" id="s-start">
+        </div>
+        <div class="fld">
+          <label>End Time</label>
+          <input type="time" id="s-end">
+        </div>
+      </div>
+      <div class="fld">
+        <label>Notes (optional)</label>
+        <textarea id="s-notes" rows="2" placeholder="Add notes..."></textarea>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-cancel" id="sched-cancel-btn">Cancel</button>
+        <button class="btn-save" id="sched-save-btn">Save Schedule</button>
+      </div>
+    </div>
+  </div>
+  
+
+  <script type="module" src="../scripts/schedule.js"></script>
+</body>
+</html>

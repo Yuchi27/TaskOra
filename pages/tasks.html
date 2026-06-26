@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TMA — My Tasks</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../styles/main.css">
+  <link rel="stylesheet" href="../styles/tasks.css">
+</head>
+<body>
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="logo">[LOGO]</div>
+    <div class="page-title">My Tasks</div>
+    <div class="topbar-right">
+      <button class="notif-btn"><i class="ti ti-bell"></i></button>
+      <div class="avatar"><i class="ti ti-user"></i></div>
+    </div>
+  </div>
+
+  <div class="layout">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <nav>
+        <a href="dashboard.html"><i class="ti ti-layout-dashboard"></i> Dashboard</a>
+        <a href="tasks.html" class="active"><i class="ti ti-checkbox"></i> Tasks</a>
+        <a href="calendar.html"><i class="ti ti-calendar"></i> Calendar</a>
+        <a href="schedule.html"><i class="ti ti-star"></i> Schedule</a>
+        <a href="analytics.html"><i class="ti ti-chart-bar"></i> Analytics</a>
+      </nav>
+      <div class="sidebar-bottom">
+        <a href="settings.html"><i class="ti ti-settings"></i> Settings</a>
+        <a href="#"><i class="ti ti-help-circle"></i> Help Center</a>
+        <a href="#" id="logout-btn"><i class="ti ti-logout"></i> Sign out</a>
+      </div>
+      <div class="sidebar-footer">© 2026 — Archie L. Agui Jr.. All rights reserved.</div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+
+      <!-- STAT CARDS -->
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-icon purple">📝</div>
+          <div class="stat-info">
+            <label>Total Tasks</label>
+            <div class="stat-num purple" id="total-tasks">0</div>
+            <div class="stat-sub">All task in total</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon orange">⌛</div>
+          <div class="stat-info">
+            <label>Pending</label>
+            <div class="stat-num orange" id="pending-tasks">0</div>
+            <div class="stat-sub">Task to do</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green"><i class="ti ti-check"></i></div>
+          <div class="stat-info">
+            <label>Completed</label>
+            <div class="stat-num green" id="completed-tasks">0</div>
+            <div class="stat-sub">Task Completed</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon red">🔥</div>
+          <div class="stat-info">
+            <label>High Priority</label>
+            <div class="stat-num red" id="high-tasks">0</div>
+            <div class="stat-sub">Tasks to focus</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TOOLBAR -->
+      <div class="toolbar">
+        <div class="search-wrap">
+          <i class="ti ti-search"></i>
+          <input type="text" id="search-input" placeholder="Search Tasks...">
+        </div>
+        <button class="btn-search" onclick="doSearch()"><i class="ti ti-search"></i> Search</button>
+        <button class="btn-add" onclick="openModal()"><i class="ti ti-plus"></i> Add Tasks</button>
+        <div class="filter-btns">
+          <button class="filter-btn active" onclick="setFilter('all', this)">All</button>
+          <button class="filter-btn" onclick="setFilter('todo', this)">To Do</button>
+          <button class="filter-btn" onclick="setFilter('deadline', this)">Deadline</button>
+          <button class="filter-btn" onclick="setFilter('completed', this)">Completed</button>
+        </div>
+      </div>
+
+      <!-- KANBAN -->
+      <div class="kanban">
+        <div class="column">
+          <div class="col-header">
+            <span><span class="col-dot blue"></span> To Do:</span>
+            <button class="col-menu"><i class="ti ti-dots-vertical"></i></button>
+          </div>
+          <div id="col-todo"></div>
+        </div>
+        <div class="column">
+          <div class="col-header">
+            <span><span class="col-dot yellow"></span> Today's Deadline:</span>
+            <button class="col-menu"><i class="ti ti-dots-vertical"></i></button>
+          </div>
+          <div id="col-deadline"></div>
+        </div>
+        <div class="column">
+          <div class="col-header">
+            <span><span class="col-dot green"></span> Completed:</span>
+            <button class="col-menu"><i class="ti ti-dots-vertical"></i></button>
+          </div>
+          <div id="col-completed"></div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- ADD TASK MODAL -->
+  <div class="modal-overlay" id="task-modal">
+    <div class="modal">
+      <h3 id="modal-title">Add New Task</h3>
+      <div class="fld">
+        <label>Task Title</label>
+        <input type="text" id="t-title" placeholder="Enter task title">
+      </div>
+      <div class="modal-row">
+        <div class="fld">
+          <label>Priority</label>
+          <select id="t-priority">
+            <option value="High">High</option>
+            <option value="Medium" selected>Medium</option>
+            <option value="Low">Low</option>
+          </select>
+        </div>
+        <div class="fld">
+          <label>Category</label>
+          <select id="t-category">
+            <option value="Personal">Personal</option>
+            <option value="School">School</option>
+            <option value="Work">Work</option>
+            <option value="Church">Church</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-row">
+        <div class="fld">
+          <label>Deadline</label>
+          <input type="datetime-local" id="t-deadline" placeholder="e.g June 30, 2026 , 11:59PM">
+        </div>
+        <div class="fld">
+          <label>Start Date</label>
+          <input type="text" id="t-hours" placeholder="e.g. June 20, 2026 ">
+        </div>
+      </div>
+      <div class="fld">
+        <label>Notes (optional)</label>
+        <textarea id="t-notes" rows="2" placeholder="Add notes..."></textarea>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+        <button class="btn-save" onclick="saveTask()">Save Task</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="../scripts/tasks.js"></script>
+</body>
+</html>

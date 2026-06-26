@@ -1,0 +1,136 @@
+/* ── DARK MODE ──
+   Activated when <html data-theme="dark">.
+   Include this AFTER main.css and any page-specific css file. */
+
+[data-theme="dark"] body {
+  background: #11161f;
+  color: #e4e7f0;
+}
+
+[data-theme="dark"] .main {
+  background: #11161f;
+}
+
+[data-theme="dark"] .topbar {
+  background: #0d1119;
+}
+
+[data-theme="dark"] .sidebar {
+  background: #0d1119;
+}
+
+[data-theme="dark"] .sidebar a {
+  color: #9aa5bf;
+}
+
+[data-theme="dark"] .sidebar a:hover {
+  background: #1a2030;
+  color: #fff;
+}
+
+[data-theme="dark"] .sidebar-footer {
+  color: #444f68;
+}
+
+/* Cards / panels (dashboard, tasks stat cards, generic white panels) */
+[data-theme="dark"] .stat-card,
+[data-theme="dark"] .panel,
+[data-theme="dark"] .panel.light,
+[data-theme="dark"] .side-card,
+[data-theme="dark"] .cal-grid-wrap,
+[data-theme="dark"] .sched-grid-wrap,
+[data-theme="dark"] .task-card,
+[data-theme="dark"] .modal,
+[data-theme="dark"] .help-card,
+[data-theme="dark"] .analytics-card {
+  background: #1a2030;
+  color: #e4e7f0;
+  box-shadow: none;
+  border: 1px solid #262e42;
+}
+
+[data-theme="dark"] .panel-header,
+[data-theme="dark"] .stat-num,
+[data-theme="dark"] .task-name,
+[data-theme="dark"] .day-num,
+[data-theme="dark"] .month-label,
+[data-theme="dark"] .week-label,
+[data-theme="dark"] .side-date,
+[data-theme="dark"] .side-title,
+[data-theme="dark"] .info-title,
+[data-theme="dark"] h1, [data-theme="dark"] h2, [data-theme="dark"] h3 {
+  color: #f0f2f8;
+}
+
+[data-theme="dark"] .panel-empty,
+[data-theme="dark"] .task-meta,
+[data-theme="dark"] .side-empty,
+[data-theme="dark"] .info-sub,
+[data-theme="dark"] .stat-sub,
+[data-theme="dark"] .side-count,
+[data-theme="dark"] label,
+[data-theme="dark"] .side-sub {
+  color: #8a93ab;
+}
+
+[data-theme="dark"] .cal-head,
+[data-theme="dark"] .sched-time-head,
+[data-theme="dark"] .sched-day-head {
+  background: #20283a;
+  color: #e4e7f0;
+}
+
+[data-theme="dark"] .cal-day,
+[data-theme="dark"] .sched-time-cell,
+[data-theme="dark"] .sched-day-col,
+[data-theme="dark"] .sched-row-line {
+  border-color: #262e42;
+}
+
+[data-theme="dark"] .cal-day:hover {
+  background: #20283a;
+}
+
+[data-theme="dark"] .cal-day.selected {
+  background: #232b4a;
+}
+
+[data-theme="dark"] .cal-day.other-month {
+  background: #161b27;
+}
+
+[data-theme="dark"] .fld input,
+[data-theme="dark"] .fld select,
+[data-theme="dark"] .fld textarea,
+[data-theme="dark"] input,
+[data-theme="dark"] select,
+[data-theme="dark"] textarea {
+  background: #11161f;
+  border-color: #2a3348;
+  color: #e4e7f0;
+}
+
+[data-theme="dark"] .btn-cancel {
+  background: #2a3348;
+  color: #e4e7f0;
+}
+
+[data-theme="dark"] .col-header,
+[data-theme="dark"] .column {
+  background: transparent;
+}
+
+[data-theme="dark"] .toolbar,
+[data-theme="dark"] .search-wrap {
+  background: transparent;
+}
+
+[data-theme="dark"] .search-wrap input {
+  background: #1a2030;
+  color: #e4e7f0;
+  border-color: #2a3348;
+}
+
+[data-theme="dark"] .legend-item {
+  background: #1a2030;
+}
