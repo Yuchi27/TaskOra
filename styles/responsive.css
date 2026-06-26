@@ -31,9 +31,10 @@
    MOBILE  (max 768px)
 ═══════════════════════════════ */
 @media (max-width: 768px) {
-  /* Hide sidebar, show bottom nav instead */
+
+  /* Hide sidebar */
   .sidebar {
-    display: none;
+    display: none !important;
   }
 
   .layout {
@@ -42,9 +43,10 @@
 
   .main {
     padding: 16px;
-    padding-bottom: 80px; /* space for bottom nav */
+    padding-bottom: 90px;
   }
 
+  /* Topbar */
   .topbar {
     padding: 0 16px;
     height: 56px;
@@ -54,7 +56,12 @@
     font-size: 18px;
   }
 
-  /* Stats */
+  .logo {
+    font-size: 14px;
+    padding: 3px 8px;
+  }
+
+  /* Stat cards */
   .stat-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 10px;
@@ -63,15 +70,27 @@
   .stat-card {
     padding: 14px;
     gap: 10px;
+    border-radius: 12px;
   }
 
   .stat-icon {
     width: 40px;
     height: 40px;
-    font-size: 20px;
+    font-size: 18px;
+    border-radius: 8px;
   }
 
-  .stat-num { font-size: 24px; }
+  .stat-num {
+    font-size: 22px;
+  }
+
+  .stat-info label {
+    font-size: 11px;
+  }
+
+  .stat-sub {
+    font-size: 10px;
+  }
 
   /* Dashboard panels */
   .panel-grid {
@@ -82,25 +101,64 @@
     grid-template-columns: 1fr;
   }
 
+  /* Top row greeting */
+  .top-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .greeting h1 {
+    font-size: 20px;
+  }
+
+  .top-actions {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .top-actions button {
+    font-size: 12px;
+    padding: 8px 12px;
+    flex: 1;
+  }
+
   /* Tasks toolbar */
   .toolbar {
     flex-direction: column;
     align-items: stretch;
+    gap: 8px;
   }
 
-  .search-wrap { max-width: 100%; }
+  .search-wrap {
+    max-width: 100%;
+  }
+
+  .btn-search, .btn-add {
+    width: 100%;
+    justify-content: center;
+  }
 
   .filter-btns {
     overflow-x: auto;
     flex-wrap: nowrap;
     padding-bottom: 4px;
+    gap: 6px;
   }
 
-  .filter-btn { white-space: nowrap; }
+  .filter-btn {
+    white-space: nowrap;
+    padding: 8px 14px;
+    font-size: 12px;
+  }
 
   /* Kanban → single column */
   .kanban {
     grid-template-columns: 1fr;
+    gap: 12px;
   }
 
   .kanban .column:last-child {
@@ -118,7 +176,7 @@
   }
 
   .cal-sidebar {
-    display: none;
+    display: none !important;
   }
 
   .cal-main {
@@ -130,26 +188,21 @@
     gap: 8px;
   }
 
-  /* Top row greeting */
-  .top-row {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-  }
-
-  .top-actions {
-    width: 100%;
-    justify-content: flex-start;
-  }
-
   /* Modal */
   .modal {
     padding: 20px 18px;
     width: 95vw;
+    max-height: 90vh;
+    overflow-y: auto;
   }
 
   .modal-row {
     grid-template-columns: 1fr;
+  }
+
+  /* Section title */
+  .section-title {
+    font-size: 13px;
   }
 }
 
@@ -168,11 +221,12 @@
     left: 0;
     right: 0;
     background: #1a2537;
-    height: 64px;
+    height: 68px;
     align-items: center;
     justify-content: space-around;
-    z-index: 99;
+    z-index: 999;
     border-top: 1px solid #243044;
+    box-shadow: 0 -4px 16px rgba(0,0,0,0.2);
   }
 
   .bottom-nav a {
@@ -184,22 +238,25 @@
     text-decoration: none;
     font-size: 10px;
     font-weight: 600;
-    padding: 8px 16px;
+    padding: 8px 20px;
     border-radius: 10px;
     transition: color 0.15s;
   }
 
   .bottom-nav a i {
-    font-size: 22px;
+    font-size: 24px;
   }
 
-  .bottom-nav a.active,
-  .bottom-nav a:hover {
+  .bottom-nav a.active {
     color: #fff;
   }
 
   .bottom-nav a.active i {
     color: #6c63ff;
+  }
+
+  .bottom-nav a:hover {
+    color: #fff;
   }
 }
 
@@ -220,12 +277,14 @@
   cursor: pointer;
 }
 
-#install-btn:hover { background: #5a52d5; }
+#install-btn:hover {
+  background: #5a52d5;
+}
 
 @media (max-width: 768px) {
   #install-btn {
     position: fixed;
-    bottom: 76px;
+    bottom: 80px;
     right: 16px;
     z-index: 100;
     box-shadow: 0 4px 16px rgba(108,99,255,0.4);
