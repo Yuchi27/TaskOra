@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="TMAPP">
 <link rel="manifest" href="../manifest.json">
-
+ 
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" rel="stylesheet">
   <link rel="stylesheet" href="../styles/main.css">
@@ -21,21 +21,21 @@
   
 </head>
 <body>
-
+ 
   <div id="loader">
       <div class="spinner"></div>
     </div>
-
+ 
   <!-- TOPBAR -->
   <div class="topbar">
-    <div class="logo">[BETA]</div>
+    <div class="logo">[LOGO]</div>
     <div class="page-title">Settings</div>
     <div class="topbar-right">
       <button class="notif-btn"><i class="ti ti-bell"></i></button>
       <div class="avatar"><i class="ti ti-user"></i></div>
     </div>
   </div>
-
+ 
   <div class="layout">
     <!-- SIDEBAR -->
     <aside class="sidebar">
@@ -53,21 +53,33 @@
       </div>
       <div class="sidebar-footer">© 2026 — Archie L. Agui Jr.. All rights reserved.</div>
     </aside>
-
+ 
     <!-- MAIN -->
     <main class="main">
-
+ 
       <div class="settings-card">
         <h3>Profile</h3>
         <div class="profile-row">
-          <div class="profile-avatar"><i class="ti ti-user"></i></div>
-          <div>
-            <div class="profile-name" id="profile-name">—</div>
-            <div class="profile-email" id="profile-email">—</div>
+          <div class="profile-avatar" id="profile-avatar">
+            <i class="ti ti-user"></i>
+          </div>
+          <div class="avatar-upload">
+            <input type="file" id="avatar-input" accept="image/*" hidden>
+            <button class="btn-upload" id="avatar-upload-btn"><i class="ti ti-camera"></i> Change Photo</button>
           </div>
         </div>
+ 
+        <div class="fld" style="margin-top:18px">
+          <label>Nickname</label>
+          <input type="text" id="nickname-input" placeholder="Enter your nickname">
+        </div>
+ 
+        <div class="profile-email" id="profile-email" style="margin-top:6px">—</div>
+ 
+        <button class="btn-save" id="profile-save-btn" style="margin-top:14px">Save Changes</button>
+        <div class="msg" id="profile-msg"></div>
       </div>
-
+ 
       <div class="settings-card">
         <h3>Appearance</h3>
         <div class="setting-row">
@@ -80,7 +92,7 @@
           </button>
         </div>
       </div>
-
+ 
       <div class="settings-card">
         <h3>Account</h3>
         <div class="setting-row">
@@ -91,7 +103,7 @@
           <button class="btn-danger" id="settings-logout-btn">Sign out</button>
         </div>
       </div>
-
+ 
     </main>
   </div>
   <!-- Bottom Nav (mobile) -->
