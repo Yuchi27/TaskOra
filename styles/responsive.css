@@ -295,15 +295,17 @@
     gap: 3px;
     color: #6b7a99;
     text-decoration: none;
-    font-size: 10px;
+    font-size: 9px;
     font-weight: 600;
-    padding: 8px 20px;
+    padding: 8px 6px;
     border-radius: 10px;
     transition: color 0.15s;
+    flex: 1;
+    min-width: 0;
   }
 
   .bottom-nav a i {
-    font-size: 24px;
+    font-size: 20px;
   }
 
   .bottom-nav a.active {
@@ -347,5 +349,134 @@
     right: 16px;
     z-index: 100;
     box-shadow: 0 4px 16px rgba(108,99,255,0.4);
+  }
+}
+
+/* ═══════════════════════════════
+   AUTH PAGE (login/register/forgot)
+═══════════════════════════════ */
+@media (max-width: 768px) {
+  body:has(.card) {
+    padding: 16px;
+    height: auto;
+    min-height: 100vh;
+  }
+
+  .card {
+    width: 100%;
+    max-width: 400px;
+    flex-direction: column;
+  }
+
+  .card .dk,
+  .card .lt {
+    width: 100% !important;
+    padding: 1.75rem 1.5rem;
+  }
+
+  .card .dk {
+    order: 2;
+    padding-top: 1.25rem;
+    padding-bottom: 1.5rem;
+  }
+
+  .card .lt {
+    order: 1;
+  }
+
+  .dk-btn {
+    max-width: 100%;
+  }
+}
+
+/* ═══════════════════════════════
+   SCHEDULE (weekly grid)
+═══════════════════════════════ */
+@media (max-width: 768px) {
+  .sched-toolbar {
+    flex-wrap: wrap;
+  }
+
+  .week-label {
+    font-size: 16px;
+    order: -1;
+    flex: 1 0 100%;
+  }
+
+  .btn-add {
+    margin-left: auto;
+    font-size: 12px;
+    padding: 8px 12px;
+  }
+
+  .sched-grid-wrap {
+    overflow-x: auto;
+  }
+
+  .sched-grid {
+    min-width: 700px;
+    grid-template-columns: 60px repeat(7, 1fr);
+  }
+
+  .sched-time-head,
+  .sched-day-head {
+    font-size: 11px;
+    padding: 8px 2px;
+  }
+
+  .sched-time-cell {
+    font-size: 10px;
+    padding: 2px 4px;
+    height: 48px;
+  }
+
+  .sched-row-line {
+    height: 48px;
+  }
+
+  .sched-block {
+    font-size: 10px;
+    padding: 3px 4px;
+  }
+}
+
+/* ═══════════════════════════════
+   SETTINGS
+═══════════════════════════════ */
+@media (max-width: 768px) {
+  .settings-card {
+    max-width: 100%;
+    padding: 18px;
+  }
+
+  .setting-row {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+}
+
+/* ═══════════════════════════════
+   SMALL PHONE (max 480px)
+═══════════════════════════════ */
+@media (max-width: 480px) {
+  .stat-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stat-card {
+    gap: 12px;
+  }
+
+  .top-actions button {
+    flex: 1 0 100%;
+  }
+
+  .modal {
+    width: 100%;
+    padding: 18px 16px;
+  }
+
+  .profile-row {
+    flex-wrap: wrap;
   }
 }
