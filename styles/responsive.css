@@ -282,30 +282,39 @@
     background: #1a2537;
     height: 68px;
     align-items: center;
-    justify-content: space-around;
+    justify-content: flex-start;
     z-index: 999;
     border-top: 1px solid #243044;
     box-shadow: 0 -4px 16px rgba(0,0,0,0.2);
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .bottom-nav::-webkit-scrollbar {
+    display: none;
   }
 
   .bottom-nav a {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     gap: 3px;
     color: #6b7a99;
     text-decoration: none;
-    font-size: 9px;
+    font-size: 10px;
     font-weight: 600;
-    padding: 8px 6px;
+    padding: 8px 0;
     border-radius: 10px;
     transition: color 0.15s;
-    flex: 1;
-    min-width: 0;
+    flex: 0 0 auto;
+    width: 76px;
   }
 
   .bottom-nav a i {
-    font-size: 20px;
+    font-size: 24px;
   }
 
   .bottom-nav a.active {
