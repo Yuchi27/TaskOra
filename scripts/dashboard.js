@@ -8,7 +8,7 @@ const quotes = [
   { text: "Don't watch the clock; do what it does. Keep going.", author: "Sam Levenson" },
   { text: "Focus on being productive instead of busy.", author: "Tim Ferriss" },
   { text: "You don't have to be great to start, but you have to start to be great.", author: "Zig Ziglar" },
-  { text: "laban diha boss", author: "Archie A.K.A lalang" },
+  { text: "laban diha boss", author: "Archie A.K.A" },
 ];
 
 let latestTasks = [];
