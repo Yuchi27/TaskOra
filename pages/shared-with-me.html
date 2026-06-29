@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TaskOra — Shared with Me</title>
+  <meta name="theme-color" content="#1a2537">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="manifest" href="../manifest.json">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../styles/main.css">
+  <link rel="stylesheet" href="../styles/tasks.css">
+  <link rel="stylesheet" href="../styles/sharing.css">
+  <link rel="stylesheet" href="../styles/darkmode.css">
+  <link rel="stylesheet" href="../styles/responsive.css">
+  <script src="../scripts/loader.js"></script>
+  <script src="../scripts/theme.js"></script>
+  <style>
+    .swm-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+    .swm-header h2 {
+      font-size: 20px;
+      font-weight: 800;
+      color: #1a2537;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .swm-count {
+      background: #6c63ff;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 2px 10px;
+      border-radius: 20px;
+    }
+    .swm-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 16px;
+    }
+    .swm-card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 18px 20px;
+      border: 1px solid #e8eaf0;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .swm-card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .swm-task-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #1a2537;
+      line-height: 1.3;
+      flex: 1;
+    }
+    .swm-owner {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: #8a9bb0;
+      font-weight: 500;
+    }
+    .swm-owner i { font-size: 13px; }
+    .swm-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+    }
+    .perm-badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 10px;
+      border-radius: 6px;
+      background: #f0eeff;
+      color: #6c63ff;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .swm-status {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #8a9bb0;
+    }
+    .swm-status .status-dot { width: 8px; height: 8px; border-radius: 50%; }
+    .swm-status .status-dot.done    { background: #27ae60; }
+    .swm-status .status-dot.pending { background: #f5a623; }
+    .swm-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 4px;
+      padding-top: 10px;
+      border-top: 1px solid #f0f2f8;
+    }
+    .swm-btn {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .swm-btn.comment {
+      background: #f0f2f8;
+      color: #1a2537;
+    }
+    .swm-btn.comment:hover { background: #e0e4f0; }
+    .swm-btn.view {
+      background: #6c63ff;
+      color: #fff;
+    }
+    .swm-btn.view:hover { background: #5a52e0; }
+    .swm-empty {
+      text-align: center;
+      padding: 60px 20px;
+      color: #8a9bb0;
+    }
+    .swm-empty i {
+      font-size: 48px;
+      display: block;
+      margin-bottom: 12px;
+      color: #d0d8e8;
+    }
+    .swm-empty p {
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .swm-empty small {
+      font-size: 12px;
+      color: #a0aab8;
+    }
+    .swm-loading {
+      text-align: center;
+      padding: 60px;
+      color: #8a9bb0;
+      font-size: 14px;
+    }
+    .shared-at {
+      font-size: 11px;
+      color: #a0aab8;
+    }
+
+    /* dark mode */
+    body.dark .swm-card { background: #1e2d42; border-color: #2a3a50; }
+    body.dark .swm-task-title { color: #e0e6f0; }
+    body.dark .swm-btn.comment { background: #2a3a50; color: #e0e6f0; }
+    body.dark .swm-header h2 { color: #e0e6f0; }
+    body.dark .swm-actions { border-top-color: #2a3a50; }
+  </style>
+</head>
+<body>
+  <div id="loader"><div class="spinner"></div></div>
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <img src="../icons/Frame 7.png" class="logo-up" alt="taskora logo">
+    <div class="page-title">Shared with Me</div>
+    <div class="topbar-right">
+      <div class="notif-wrap">
+        <button class="notif-btn" id="notif-bell" onclick="toggleNotifDropdown()">
+          <i class="ti ti-bell"></i>
+          <span id="notif-badge">0</span>
+        </button>
+        <div class="notif-dropdown" id="notif-dropdown">
+          <div class="notif-dropdown-header">
+            <span>Notifications</span>
+            <button onclick="markAllRead()">Mark all read</button>
+          </div>
+          <div class="notif-list" id="notif-list">
+            <div class="notif-empty">No notifications yet</div>
+          </div>
+        </div>
+      </div>
+      <div class="avatar"><i class="ti ti-user"></i></div>
+    </div>
+  </div>
+
+  <div class="layout">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <nav>
+        <a href="dashboard.html"><i class="ti ti-layout-dashboard"></i> Dashboard</a>
+        <a href="tasks.html"><i class="ti ti-checkbox"></i> Tasks</a>
+        <a href="calendar.html"><i class="ti ti-calendar"></i> Calendar</a>
+        <a href="schedule.html"><i class="ti ti-star"></i> Schedule</a>
+        <a href="notes.html"><i class="ti ti-notebook"></i> Notes</a>
+        <a href="analytics.html"><i class="ti ti-chart-bar"></i> Analytics</a>
+        <a href="shared-with-me.html" class="active"><i class="ti ti-share"></i> Shared with Me</a>
+      </nav>
+      <div class="sidebar-bottom">
+        <a href="settings.html"><i class="ti ti-settings"></i> Settings</a>
+        <a href="#"><i class="ti ti-help-circle"></i> Help Center</a>
+        <a href="#" id="logout-btn"><i class="ti ti-logout"></i> Sign out</a>
+      </div>
+      <div class="sidebar-footer">© 2026 — Archie L. Agui Jr.. All rights reserved.</div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+      <div class="swm-header">
+        <h2><i class="ti ti-share"></i> Shared with Me <span class="swm-count" id="swm-count">0</span></h2>
+      </div>
+
+      <div id="swm-loading" class="swm-loading">
+        <i class="ti ti-loader" style="font-size:28px"></i><br>Loading shared tasks...
+      </div>
+
+      <div class="swm-grid" id="swm-grid" style="display:none"></div>
+      <div id="swm-empty" class="swm-empty" style="display:none">
+        <i class="ti ti-share-off"></i>
+        <p>No shared tasks yet</p>
+        <small>When someone shares a task with you, it will appear here.</small>
+      </div>
+    </main>
+  </div>
+
+  <!-- COMMENTS MODAL -->
+  <div class="modal-overlay" id="comments-modal">
+    <div class="modal">
+      <div class="comments-modal-header">
+        <div>
+          <h3><i class="ti ti-message-circle"></i> Comments</h3>
+          <div class="comments-task-name" id="comments-task-title"></div>
+        </div>
+        <button class="modal-close-btn" onclick="closeCommentsModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div id="comments-list">
+        <div class="comments-empty">No comments yet. Be the first!</div>
+      </div>
+      <div class="comments-input-area">
+        <textarea id="comment-input" placeholder="Write a comment..." rows="1"
+          onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendComment();}"></textarea>
+        <button class="btn-send-comment" onclick="sendComment()"><i class="ti ti-send"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Nav -->
+  <nav class="bottom-nav">
+    <a href="dashboard.html"><i class="ti ti-layout-dashboard"></i> Home</a>
+    <a href="tasks.html"><i class="ti ti-checkbox"></i> Tasks</a>
+    <a href="calendar.html"><i class="ti ti-calendar"></i> Calendar</a>
+    <a href="shared-with-me.html" class="active"><i class="ti ti-share"></i> Shared</a>
+    <a href="notes.html"><i class="ti ti-notebook"></i> Notes</a>
+    <a href="analytics.html"><i class="ti ti-chart-bar"></i> Analytics</a>
+    <a href="settings.html"><i class="ti ti-settings"></i> Settings</a>
+  </nav>
+
+  <script>
+    function toggleNotifDropdown() {
+      document.getElementById("notif-dropdown").classList.toggle("open");
+    }
+    document.addEventListener("click", (e) => {
+      if (!e.target.closest(".notif-wrap"))
+        document.getElementById("notif-dropdown")?.classList.remove("open");
+    });
+    async function markAllRead() {
+      const { db, auth } = await import("../scripts/firebase.js");
+      const { collection, getDocs, updateDoc, doc, query, where } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+      const user = auth.currentUser;
+      if (!user) return;
+      const snap = await getDocs(query(collection(db, "users", user.uid, "notifications"), where("read", "==", false)));
+      snap.forEach(d => updateDoc(doc(db, "users", user.uid, "notifications", d.id), { read: true }));
+    }
+  </script>
+  <script src="../scripts/pwa.js"></script>
+  <script type="module" src="../scripts/shared-with-me.js"></script>
+  <script type="module" src="../scripts/task-comments.js"></script>
+</body>
+</html>

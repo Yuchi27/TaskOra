@@ -63,12 +63,11 @@ function renderFolderList() {
     .sort((a, b) => {
       const aDone = a.task.status === "completed" ? 1 : 0;
       const bDone = b.task.status === "completed" ? 1 : 0;
-      return aDone - bDone; // not-done una, completed sa ubos
+      return aDone - bDone;
     });
 
   let html = "";
 
-  // ── MY NOTES FOLDER ──
   html += `
     <div class="folder-item ${activeFolder === "notes" ? "active" : ""}" onclick="selectFolder('notes')">
       <div class="folder-item-top">
@@ -78,7 +77,6 @@ function renderFolderList() {
       </div>
     </div>`;
 
-  // Notes under My Notes (kung active)
   if (activeFolder === "notes") {
     const visibleNotes = getVisibleNotes();
     if (!visibleNotes.length) {
@@ -93,7 +91,6 @@ function renderFolderList() {
     }
   }
 
-  // ── TASK FOLDERS ──
   if (taskFolders.length) {
     html += `<div class="folder-section-label">TASKS</div>`;
 
@@ -118,7 +115,6 @@ function renderFolderList() {
           </div>
         </div>`;
 
-      // Notes under this task — pakita ra kung expanded
       if (isExpanded) {
         const taskNotes = notes.filter(n => {
           if (!searchQuery) return true;
@@ -134,7 +130,6 @@ function renderFolderList() {
     });
   }
 
-  // Update count
   const visibleNotes = getVisibleNotes();
   document.getElementById("np-count").textContent =
     `${visibleNotes.length} note${visibleNotes.length !== 1 ? "s" : ""}`;
@@ -173,7 +168,6 @@ function buildNoteItem(n, indented = false) {
     </div>`;
 }
 
-// ── TOGGLE EXPAND/COLLAPSE SA TASK FOLDER ──
 window.toggleFolderExpand = (taskId) => {
   if (expandedFolders.has(taskId)) {
     expandedFolders.delete(taskId);
@@ -183,9 +177,8 @@ window.toggleFolderExpand = (taskId) => {
   renderFolderList();
 };
 
-// ── SELECT FOLDER ──
 window.selectFolder = (folderId) => {
-  flushPending(); // background save, dili gina-await
+  flushPending();
   activeFolder = folderId;
   selectedNoteId = null;
   editingNoteId = null;
@@ -205,7 +198,6 @@ window.selectFolder = (folderId) => {
   }
 };
 
-// ── BLANK EDITOR (bag-ong note, wala pa sa Firestore) ──
 function openBlankTaskEditor(taskId) {
   const task = allTasks.find(t => t.id === taskId);
   if (!task) return;
@@ -241,6 +233,7 @@ function openBlankTaskEditor(taskId) {
             placeholder="Add tag..." oninput="scheduleBlankSave('${taskId}')" />
         </div>
         <div class="nd-edit-colors" id="nd-edit-colors"></div>
+        <div class="nd-vertical-resizer" id="nd-vertical-resizer"></div>
         <textarea class="nd-edit-text" id="nd-edit-text" placeholder="Write something..."
           oninput="autoResizeTA(this);scheduleBlankSave('${taskId}')"></textarea>
       </div>
@@ -313,15 +306,13 @@ function resetDetail() {
     </div>`;
 }
 
-// ── SELECT NOTE ──
 window.selectNote = (id) => {
-  flushPending(); // background save, dili gina-await
+  flushPending();
   selectedNoteId = id;
   renderFolderList();
   startInlineEdit(id);
 };
 
-// ── INLINE EDIT ──
 window.startInlineEdit = (id) => {
   const note = allNotes.find(n => n.id === id);
   if (!note) return;
@@ -367,6 +358,7 @@ window.startInlineEdit = (id) => {
             oninput="scheduleAutosave()" />
         </div>
         <div class="nd-edit-colors" id="nd-edit-colors"></div>
+        <div class="nd-vertical-resizer" id="nd-vertical-resizer"></div>
         <textarea class="nd-edit-text" id="nd-edit-text" placeholder="Write something..."
           oninput="autoResizeTA(this);scheduleAutosave()"
         >${esc(note.body || "")}</textarea>
@@ -395,6 +387,36 @@ function buildInlineColorPicker() {
          data-color="${c}" onclick="pickInlineColor('${c}')"
          title="${c.replace("c-", "")}"></div>
   `).join("");
+  initVerticalResizer();
+}
+
+function initVerticalResizer() {
+  const resizer = document.getElementById("nd-vertical-resizer");
+  const ta      = document.getElementById("nd-edit-text");
+  if (!resizer || !ta) return;
+
+  let startY, startH;
+
+  resizer.addEventListener("mousedown", (e) => {
+    startY = e.clientY;
+    startH = ta.offsetHeight;
+    resizer.classList.add("dragging");
+    document.addEventListener("mousemove", onVDrag);
+    document.addEventListener("mouseup", stopVDrag);
+    e.preventDefault();
+  });
+
+  function onVDrag(e) {
+    const delta = e.clientY - startY;
+    const newH  = Math.max(80, startH + delta);
+    ta.style.height = newH + "px";
+  }
+
+  function stopVDrag() {
+    resizer.classList.remove("dragging");
+    document.removeEventListener("mousemove", onVDrag);
+    document.removeEventListener("mouseup", stopVDrag);
+  }
 }
 
 window.pickInlineColor = (color) => {
@@ -407,7 +429,6 @@ window.pickInlineColor = (color) => {
   scheduleAutosave();
 };
 
-// ── AUTO-SAVE ──
 window.scheduleAutosave = () => {
   clearTimeout(saveTimer);
   saveTimer = setTimeout(() => doAutosave(), 500);
@@ -440,9 +461,6 @@ async function doAutosave(idOverride) {
   }
 }
 
-// ── FLUSH: i-save dayon ang pending edits sa karon nga note/blank task
-//    una mubalhin sa lain nga note/folder, aron dili mawala o ma-save
-//    sa SAYOP nga note ang content. ──
 async function flushPending() {
   if (saveTimer) {
     clearTimeout(saveTimer);
@@ -456,7 +474,6 @@ async function flushPending() {
   }
 }
 
-// ── ADD NOTE (modal) ──
 window.openNoteModal = () => {
   editingNoteId = null;
   document.getElementById("note-modal-title").textContent = "New Note";
@@ -540,7 +557,6 @@ window.saveNote = async () => {
   }
 };
 
-// ── DELETE ──
 window.deleteNote = async (id) => {
   if (!confirm("Delete this note?")) return;
   try {
@@ -553,7 +569,6 @@ window.deleteNote = async (id) => {
   }
 };
 
-// ── COLOR PICKER (modal) ──
 function setColor(color) {
   selectedColor = color;
   document.querySelectorAll(".color-swatch").forEach(s => {
@@ -572,27 +587,23 @@ function buildColorPicker() {
 
 window.pickColor = (color) => setColor(color);
 
-// ── BACK (mobile) ──
 window.goBackList = () => {
-  flushPending(); // background save, dili gina-await
+  flushPending();
   document.getElementById("note-detail").classList.remove("mobile-open");
   selectedNoteId = null;
   editingNoteId = null;
   renderFolderList();
 };
 
-// ── SEARCH ──
 document.getElementById("note-search").addEventListener("input", (e) => {
   searchQuery = e.target.value.trim();
   renderFolderList();
 });
 
-// ── CLOSE MODAL ON BACKDROP ──
 document.addEventListener("click", (e) => {
   if (e.target === document.getElementById("note-modal")) closeNoteModal();
 });
 
-// ── AUTH + FIRESTORE ──
 onAuthStateChanged(auth, (user) => {
   if (!user) { window.location.replace("auth.html"); return; }
   currentUser = user;
@@ -620,4 +631,32 @@ onAuthStateChanged(auth, (user) => {
       if (stillExists) startInlineEdit(selectedNoteId);
     }
   }, (err) => console.error("Notes error:", err));
+
+  // ── HORIZONTAL RESIZABLE PANEL ──
+  const resizer = document.getElementById("notes-resizer");
+  const panel   = document.getElementById("notes-panel");
+
+  if (resizer && panel) {
+    let startX, startW;
+
+    resizer.addEventListener("mousedown", (e) => {
+      startX = e.clientX;
+      startW = panel.offsetWidth;
+      resizer.classList.add("dragging");
+      document.addEventListener("mousemove", onDrag);
+      document.addEventListener("mouseup", stopDrag);
+      e.preventDefault();
+    });
+
+    function onDrag(e) {
+      const newW = Math.min(500, Math.max(180, startW + (e.clientX - startX)));
+      panel.style.width = newW + "px";
+    }
+
+    function stopDrag() {
+      resizer.classList.remove("dragging");
+      document.removeEventListener("mousemove", onDrag);
+      document.removeEventListener("mouseup", stopDrag);
+    }
+  }
 });

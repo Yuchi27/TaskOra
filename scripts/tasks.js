@@ -46,13 +46,14 @@ function buildCard(task) {
       <div class="task-check ${isDone ? 'done' : ''}" onclick="toggleDone('${task.id}', ${isDone})">
         ${isDone ? '<i class="ti ti-check" style="font-size:13px"></i>' : ''}
       </div>
-      <div class="task-title">${task.title}</div>
+      <div class="task-title task-title-link" onclick="openTaskDetail('${task.id}')">${task.title}</div>
       <div style="position:relative">
         <button class="task-options" onclick="toggleMenu('${task.id}')">
           <i class="ti ti-dots-vertical"></i>
         </button>
         <div class="dropdown-menu" id="menu-${task.id}">
           <button onclick="editTask('${task.id}')"><i class="ti ti-edit"></i> Edit</button>
+          <button onclick="shareTaskCard('${task.id}')"><i class="ti ti-share"></i> Share</button>
           <button class="del" onclick="deleteTask('${task.id}')"><i class="ti ti-trash"></i> Delete</button>
         </div>
       </div>
@@ -63,10 +64,24 @@ function buildCard(task) {
       ${task.workHours ? `<span class="meta-item"><i class="ti ti-clock" style="font-size:13px"></i> ${task.workHours}</span>` : ''}
     </div>
     ${task.category ? `<div style="margin-top:6px"><span class="cat-badge"><i class="ti ti-user" style="font-size:11px"></i> ${task.category}</span></div>` : ''}
+    <div class="task-action-bar">
+      <button class="task-comment-btn" onclick="openCommentsModal('${task.id}', {title: '${task.title.replace(/'/g, "\\'").replace(/"/g, '\\"')}' })">
+        <i class="ti ti-message-circle"></i> <span class="comment-count">Comments</span>
+      </button>
+      <button class="task-share-btn" onclick="shareTaskCard('${task.id}')">
+        <i class="ti ti-share"></i> Share
+      </button>
+    </div>
   </div>`;
 }
 
-// ── PAKITA RA ANG COLUMN(S) NGA PARAHA SA PILI NGA FILTER ──
+window.shareTaskCard = (id) => {
+  const task = allTasks.find(t => t.id === id);
+  if (!task) return;
+  openShareModal(id, task);
+  document.getElementById("menu-" + id)?.classList.remove("open");
+};
+
 function applyColumnVisibility() {
   const columns = {
     todo: document.getElementById("col-todo")?.closest(".column"),
@@ -131,7 +146,7 @@ function updateStats(tasks) {
   document.getElementById("high-tasks").textContent      = tasks.filter(t => t.priority === "High" && t.status !== "completed").length;
 }
 
-// ── MODAL ──
+// ── MODALS ──
 window.openModal = () => {
   editingId = null;
   document.getElementById("modal-title").textContent = "Add New Task";
@@ -150,38 +165,30 @@ window.closeModal = () => {
 
 window.saveTask = async () => {
   try {
-    const title = document.getElementById("t-title").value.trim();
+    const title    = document.getElementById("t-title").value.trim();
     const priority = document.getElementById("t-priority").value;
     const category = document.getElementById("t-category").value;
-    const dlVal = document.getElementById("t-deadline").value;
-    const hours = document.getElementById("t-hours").value.trim();
-    const notes = document.getElementById("t-notes").value.trim();
+    const dlVal    = document.getElementById("t-deadline").value;
+    const hours    = document.getElementById("t-hours").value.trim();
+    const notes    = document.getElementById("t-notes").value.trim();
 
     if (!title) return alert("Please enter a task title.");
 
     const data = {
-      title,
-      priority,
-      category,
+      title, priority, category,
       deadline: dlVal ? new Date(dlVal) : null,
-      workHours: hours,
-      notes,
+      workHours: hours, notes,
       updatedAt: serverTimestamp()
     };
 
     if (editingId) {
       await updateDoc(taskDoc(editingId), data);
     } else {
-      await addDoc(tasksRef(), {
-        ...data,
-        status: "todo",
-        createdAt: serverTimestamp()
-      });
+      await addDoc(tasksRef(), { ...data, status: "todo", createdAt: serverTimestamp() });
     }
 
     alert("Task Saved!");
     closeModal();
-
   } catch (err) {
     console.error(err);
     alert(err.message);
@@ -237,11 +244,65 @@ window.doSearch = () => {
   renderTasks();
 };
 
+// ── TASK DETAIL MODAL ──
+window.openTaskDetail = (id) => {
+  const task = allTasks.find(t => t.id === id);
+  if (!task) return;
+
+  document.getElementById("td-title").textContent = task.title;
+
+  const prioEl = document.getElementById("td-priority");
+  prioEl.textContent = task.priority;
+  prioEl.className = `priority-badge ${task.priority}`;
+
+  document.getElementById("td-category").textContent = task.category || "—";
+
+  const dot = document.getElementById("td-status-dot");
+  dot.className = "task-detail-status " + (task.status === "completed" ? "done" : "pending");
+
+  const dlRow = document.getElementById("td-deadline-row");
+  if (task.deadline) {
+    document.getElementById("td-deadline").textContent = formatDeadline(task.deadline);
+    dlRow.style.display = "flex";
+  } else {
+    dlRow.style.display = "none";
+  }
+
+  const hrRow = document.getElementById("td-hours-row");
+  if (task.workHours) {
+    document.getElementById("td-hours").textContent = task.workHours;
+    hrRow.style.display = "flex";
+  } else {
+    hrRow.style.display = "none";
+  }
+
+  const notesRow = document.getElementById("td-notes-row");
+  if (task.notes) {
+    document.getElementById("td-notes").textContent = task.notes;
+    notesRow.style.display = "flex";
+  } else {
+    notesRow.style.display = "none";
+  }
+
+  document.getElementById("td-edit-btn").onclick = () => {
+    closeTaskDetail();
+    editTask(id);
+  };
+
+  document.getElementById("task-detail-modal").classList.add("open");
+};
+
+window.closeTaskDetail = () => {
+  document.getElementById("task-detail-modal").classList.remove("open");
+};
+
+// ── CLICK OUTSIDE TO CLOSE ──
 document.addEventListener("click", (e) => {
   if (!e.target.closest(".task-options") && !e.target.closest(".dropdown-menu")) {
     document.querySelectorAll(".dropdown-menu").forEach(m => m.classList.remove("open"));
   }
   if (e.target === document.getElementById("task-modal")) closeModal();
+  if (e.target === document.getElementById("task-detail-modal")) closeTaskDetail();
 });
 
 document.getElementById("search-input").addEventListener("keyup", (e) => {
@@ -249,23 +310,40 @@ document.getElementById("search-input").addEventListener("keyup", (e) => {
 });
 
 // ── AUTH + FIRESTORE ──
-onAuthStateChanged(auth, (user) => {
+onAuthStateChanged(auth, async (user) => {
   if (!user) { window.location.replace("auth.html"); return; }
   currentUser = user;
+
+  try {
+    const { loadNotifications, initNotifications, checkDeadlines } = await import("./notifications.js");
+    loadNotifications(user.uid);
+    initNotifications(user.uid);
+
+    const q = query(tasksRef(), orderBy("createdAt", "desc"));
+    onSnapshot(q, (snap) => {
+      allTasks = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      updateStats(allTasks);
+      renderTasks();
+      checkDeadlines(user.uid, allTasks);
+    }, (error) => {
+      console.error("Snapshot ERROR:", error);
+    });
+  } catch (err) {
+    console.error("Init error:", err);
+
+    const q = query(tasksRef(), orderBy("createdAt", "desc"));
+    onSnapshot(q, (snap) => {
+      allTasks = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      updateStats(allTasks);
+      renderTasks();
+    }, (error) => {
+      console.error("Snapshot ERROR:", error);
+    });
+  }
 
   document.getElementById("logout-btn").addEventListener("click", async (e) => {
     e.preventDefault();
     await signOut(auth);
     window.location.replace("auth.html");
-  });
-
-const q = query(tasksRef(), orderBy("createdAt", "desc"));
-  onSnapshot(q, (snap) => {
-    console.log("Snapshot fired! Number of tasks:", snap.docs.length);
-    allTasks = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-    updateStats(allTasks);
-    renderTasks();
-  }, (error) => {
-    console.error("Snapshot ERROR:", error);
   });
 });

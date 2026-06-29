@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TaskOra — Shared Task</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../styles/main.css">
+  <link rel="stylesheet" href="../styles/tasks.css">
+  <link rel="stylesheet" href="../styles/sharing.css">
+  <link rel="stylesheet" href="../styles/darkmode.css">
+  <script src="../scripts/theme.js"></script>
+  <style>
+    body { overflow: auto; display: block; background: #f0f2f8; min-height: 100vh; }
+
+    .shared-page-wrap {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 40px 20px 80px;
+    }
+
+    .shared-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+
+    .shared-logo {
+      height: 38px;
+    }
+
+    .shared-badge {
+      background: #6c63ff;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 20px;
+      letter-spacing: 0.04em;
+    }
+
+    .shared-task-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      border: 1px solid #e8eaf0;
+      margin-bottom: 20px;
+    }
+
+    .shared-task-card h2 {
+      font-size: 20px;
+      font-weight: 800;
+      color: #1a2537;
+      margin-bottom: 14px;
+      line-height: 1.3;
+    }
+
+    .shared-task-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .shared-task-notes {
+      background: #f8f9fc;
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: 13px;
+      color: #4a5570;
+      line-height: 1.6;
+      margin-top: 14px;
+    }
+
+    .shared-task-notes label {
+      font-size: 11px;
+      font-weight: 700;
+      color: #8a9bb0;
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .shared-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid #f0f2f8;
+    }
+
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .status-dot.done     { background: #27ae60; }
+    .status-dot.pending  { background: #f5a623; }
+
+    /* Comments section */
+    .comments-section {
+      background: #fff;
+      border-radius: 16px;
+      padding: 20px 24px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      border: 1px solid #e8eaf0;
+    }
+
+    .comments-section h3 {
+      font-size: 15px;
+      font-weight: 800;
+      color: #1a2537;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .permission-notice {
+      background: #fff8e1;
+      border: 1px solid #ffe082;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 12px;
+      color: #7a5c00;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .login-prompt {
+      background: #f0eeff;
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      margin-top: 16px;
+    }
+
+    .login-prompt p {
+      font-size: 14px;
+      color: #4a5570;
+      margin-bottom: 12px;
+    }
+
+    .login-prompt a {
+      background: #6c63ff;
+      color: #fff;
+      padding: 10px 24px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    #shared-comments-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      max-height: 400px;
+      overflow-y: auto;
+      margin-bottom: 16px;
+    }
+
+    .shared-comment-input-row {
+      display: flex;
+      gap: 10px;
+      align-items: flex-end;
+    }
+
+    .shared-comment-input-row textarea {
+      flex: 1;
+      background: #f0f2f8;
+      border: 1.5px solid #d0d8e8;
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-size: 13px;
+      color: #1a2537;
+      outline: none;
+      resize: none;
+      font-family: 'Inter', sans-serif;
+      min-height: 42px;
+    }
+    .shared-comment-input-row textarea:focus { border-color: #6c63ff; }
+
+    #loading-msg {
+      text-align: center;
+      color: #8a9bb0;
+      padding: 40px 0;
+      font-size: 14px;
+    }
+
+    #error-msg {
+      text-align: center;
+      color: #e74c3c;
+      padding: 40px 0;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="shared-page-wrap">
+    <div class="shared-header">
+      <img src="../icons/Frame 7.png" class="shared-logo" alt="TaskOra">
+      <span class="shared-badge">Shared Task</span>
+    </div>
+
+    <div id="loading-msg"><i class="ti ti-loader" style="font-size:24px"></i><br>Loading shared task...</div>
+    <div id="error-msg" style="display:none"></div>
+
+    <div id="task-content" style="display:none">
+      <div class="shared-task-card">
+        <h2 id="st-title"></h2>
+        <div class="shared-task-meta">
+          <span class="priority-badge" id="st-priority"></span>
+          <span class="cat-badge" id="st-category" style="display:none"></span>
+          <span class="meta-item" id="st-deadline" style="display:none"><i class="ti ti-calendar" style="font-size:13px"></i> <span></span></span>
+        </div>
+        <div class="shared-status">
+          <div class="status-dot" id="st-status-dot"></div>
+          <span id="st-status-text"></span>
+        </div>
+        <div class="shared-task-notes" id="st-notes-wrap" style="display:none">
+          <label>Notes</label>
+          <div id="st-notes"></div>
+        </div>
+      </div>
+
+      <div class="comments-section">
+        <h3><i class="ti ti-message-circle"></i> Comments</h3>
+
+        <div class="permission-notice" id="perm-notice" style="display:none">
+          <i class="ti ti-info-circle"></i>
+          <span id="perm-notice-text"></span>
+        </div>
+
+        <div id="shared-comments-list">
+          <div class="comments-empty">No comments yet.</div>
+        </div>
+
+        <div id="comment-input-area" style="display:none">
+          <div class="shared-comment-input-row">
+            <textarea id="shared-comment-input" placeholder="Write a comment..."
+              onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();postSharedComment();}"></textarea>
+            <button class="btn-send-comment" onclick="postSharedComment()"><i class="ti ti-send"></i></button>
+          </div>
+        </div>
+
+        <div class="login-prompt" id="login-prompt" style="display:none">
+          <p>Sign in to TaskOra to leave a comment.</p>
+          <a href="auth.html">Sign In</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { auth, db } from "../scripts/firebase.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import {
+      doc, getDoc, collection, query, orderBy,
+      onSnapshot, addDoc, serverTimestamp, updateDoc,
+      arrayUnion, arrayRemove
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const params   = new URLSearchParams(location.search);
+    const taskId   = params.get("task");
+    const ownerUid = params.get("owner");
+
+    const REACTIONS = ["👍", "❤️", "😂", "😮", "🔥", "✅"];
+
+    function encodeEmoji(e) {
+      return [...e].map(c => c.codePointAt(0).toString(16)).join("_");
+    }
+
+    function formatDeadline(ts) {
+      if (!ts) return "";
+      const d = ts.toDate ? ts.toDate() : new Date(ts);
+      return d.toLocaleDateString("en-US", { weekday: "short", month: "long", day: "numeric", year: "numeric" })
+        + " at " + d.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" });
+    }
+
+    if (!taskId || !ownerUid) {
+      document.getElementById("loading-msg").style.display = "none";
+      document.getElementById("error-msg").style.display = "block";
+      document.getElementById("error-msg").textContent = "Invalid share link.";
+    } else {
+      onAuthStateChanged(auth, async (user) => {
+        try {
+          // Load task
+          const taskSnap = await getDoc(doc(db, "users", ownerUid, "tasks", taskId));
+          if (!taskSnap.exists()) throw new Error("Task not found or no longer shared.");
+
+          const task = { id: taskSnap.id, ...taskSnap.data() };
+
+          // Check permission
+          let permission = "view"; // default for link-based sharing
+          if (user) {
+            const shareSnap = await getDoc(doc(db, "users", ownerUid, "tasks", taskId, "shares", user.uid));
+            if (shareSnap.exists()) permission = shareSnap.data().permission;
+            // Owner has full access
+            if (user.uid === ownerUid) permission = "full";
+          }
+
+          // Render task
+          document.getElementById("loading-msg").style.display = "none";
+          document.getElementById("task-content").style.display = "block";
+
+          document.getElementById("st-title").textContent = task.title;
+          document.title = `${task.title} — TaskOra`;
+
+          const pb = document.getElementById("st-priority");
+          pb.textContent = task.priority;
+          pb.className   = `priority-badge ${task.priority}`;
+
+          if (task.category) {
+            const cb = document.getElementById("st-category");
+            cb.style.display = "flex";
+            cb.innerHTML = `<i class="ti ti-user" style="font-size:11px"></i> ${task.category}`;
+          }
+
+          if (task.deadline) {
+            const db2 = document.getElementById("st-deadline");
+            db2.style.display = "flex";
+            db2.querySelector("span").textContent = formatDeadline(task.deadline);
+          }
+
+          const isDone = task.status === "completed";
+          document.getElementById("st-status-dot").className = `status-dot ${isDone ? "done" : "pending"}`;
+          document.getElementById("st-status-text").textContent = isDone ? "Completed" : "In Progress";
+
+          if (task.notes) {
+            document.getElementById("st-notes-wrap").style.display = "block";
+            document.getElementById("st-notes").textContent = task.notes;
+          }
+
+          // Permission notice
+          if (user && permission !== "full") {
+            const notices = {
+              view:    "You have view-only access to this task.",
+              comment: "You can view and comment on this task.",
+              edit:    "You can view, comment, and edit this task."
+            };
+            if (notices[permission]) {
+              document.getElementById("perm-notice").style.display = "flex";
+              document.getElementById("perm-notice-text").textContent = notices[permission];
+            }
+          }
+
+          // Comment input visibility
+          if (!user) {
+            document.getElementById("login-prompt").style.display = "block";
+          } else if (["comment","edit","full"].includes(permission)) {
+            document.getElementById("comment-input-area").style.display = "block";
+          }
+
+          // Load comments real-time
+          const commentsRef = collection(db, "users", ownerUid, "tasks", taskId, "comments");
+          const q = query(commentsRef, orderBy("createdAt", "asc"));
+
+          onSnapshot(q, (snap) => {
+            const comments = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+            const list = document.getElementById("shared-comments-list");
+            const me   = user?.uid;
+
+            if (!comments.length) {
+              list.innerHTML = `<div class="comments-empty">No comments yet. Be the first!</div>`;
+              return;
+            }
+
+            list.innerHTML = comments.map(c => {
+              const isMe = c.authorUid === me;
+              const time = c.createdAt?.toDate
+                ? c.createdAt.toDate().toLocaleString("en-US", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })
+                : "";
+
+              const reactionHtml = REACTIONS.map(emoji => {
+                const users2 = c.reactions?.[encodeEmoji(emoji)] || [];
+                const count  = users2.length;
+                const reacted = me && users2.includes(me);
+                const canReact = me && ["comment","edit","full"].includes(permission);
+                return canReact
+                  ? `<button class="reaction-btn ${reacted ? "reacted" : ""}" onclick="toggleReaction('${c.id}','${emoji}')">
+                      ${emoji}${count ? ` <span>${count}</span>` : ""}
+                    </button>`
+                  : (count ? `<span class="reaction-btn reacted">${emoji} <span>${count}</span></span>` : "");
+              }).join("");
+
+              return `
+                <div class="comment-item ${isMe ? "mine" : ""}">
+                  <div class="comment-avatar"><i class="ti ti-user"></i></div>
+                  <div class="comment-body">
+                    <div class="comment-meta">
+                      <span class="comment-author">${c.authorName || "User"}</span>
+                      <span class="comment-time">${time}</span>
+                    </div>
+                    <div class="comment-text">${String(c.text||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\n/g,"<br>")}</div>
+                    <div class="comment-reactions">${reactionHtml}</div>
+                  </div>
+                </div>`;
+            }).join("");
+
+            list.scrollTop = list.scrollHeight;
+          });
+
+          // Post comment
+          window.postSharedComment = async () => {
+            if (!user) return;
+            const input = document.getElementById("shared-comment-input");
+            const text  = input.value.trim();
+            if (!text) return;
+
+            await addDoc(collection(db, "users", ownerUid, "tasks", taskId, "comments"), {
+              text,
+              authorUid:  user.uid,
+              authorName: user.displayName || user.email?.split("@")[0] || "User",
+              reactions:  {},
+              createdAt:  serverTimestamp()
+            });
+            input.value = "";
+          };
+
+          // Toggle reaction
+          window.toggleReaction = async (commentId, emoji) => {
+            if (!user) return;
+            const me2 = user.uid;
+            const ref  = doc(db, "users", ownerUid, "tasks", taskId, "comments", commentId);
+            const snap2 = await getDoc(ref);
+            if (!snap2.exists()) return;
+            const reactions = snap2.data().reactions || {};
+            const key       = encodeEmoji(emoji);
+            const users3    = reactions[key] || [];
+            await updateDoc(ref, {
+              [`reactions.${key}`]: users3.includes(me2) ? arrayRemove(me2) : arrayUnion(me2)
+            });
+          };
+
+        } catch (err) {
+          document.getElementById("loading-msg").style.display = "none";
+          document.getElementById("error-msg").style.display = "block";
+          document.getElementById("error-msg").textContent = err.message;
+        }
+      });
+    }
+  </script>
+</body>
+</html>

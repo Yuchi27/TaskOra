@@ -16,6 +16,7 @@
   <link rel="stylesheet" href="../styles/tasks.css">
   <link rel="stylesheet" href="../styles/darkmode.css">
   <link rel="stylesheet" href="../styles/responsive.css">
+  <link rel="stylesheet" href="../styles/sharing.css">
   <script src="../scripts/loader.js"></script>
   <script src="../scripts/theme.js"></script>
 </head>
@@ -59,6 +60,7 @@
         <a href="schedule.html"><i class="ti ti-star"></i> Schedule</a>
         <a href="notes.html"><i class="ti ti-notebook"></i> Notes</a>
         <a href="analytics.html"><i class="ti ti-chart-bar"></i> Analytics</a>
+        <a href="shared-with-me.html"><i class="ti ti-share"></i> Shared with Me</a>
       </nav>
       <div class="sidebar-bottom">
         <a href="settings.html"><i class="ti ti-settings"></i> Settings</a>
@@ -197,6 +199,95 @@
       </div>
     </div>
   </div>
+  <!-- SHARE MODAL -->
+  <div class="modal-overlay" id="share-modal">
+    <div class="modal">
+      <div class="share-modal-header">
+        <div>
+          <h3><i class="ti ti-share"></i> Share Task</h3>
+          <div class="share-task-subtitle" id="share-task-title"></div>
+        </div>
+        <button class="modal-close-btn" onclick="closeShareModal()"><i class="ti ti-x"></i></button>
+      </div>
+     
+      <div class="share-section-label"><i class="ti ti-mail"></i> Invite by email</div>
+      <div class="share-invite-row">
+        <input type="email" id="share-email-input" placeholder="Enter email address...">
+        <select id="share-perm-select">
+          <option value="view">View only</option>
+          <option value="comment" selected>View + Comment</option>
+          <option value="edit">View + Comment + Edit</option>
+          <option value="full">Full Access</option>
+        </select>
+        <button class="btn-invite" onclick="inviteByEmail()"><i class="ti ti-send"></i> Invite</button>
+      </div>
+      <div class="share-msg" id="share-msg"></div>
+      <div class="share-section-label"><i class="ti ti-users"></i> Shared with</div>
+      <div class="shared-users-list" id="shared-users-list">
+        <div class="share-empty">Not shared with anyone yet.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMMENTS MODAL -->
+  <div class="modal-overlay" id="comments-modal">
+    <div class="modal">
+      <div class="comments-modal-header">
+        <div>
+          <h3><i class="ti ti-message-circle"></i> Comments</h3>
+          <div class="comments-task-name" id="comments-task-title"></div>
+        </div>
+        <button class="modal-close-btn" onclick="closeCommentsModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div id="comments-list">
+        <div class="comments-empty">No comments yet. Be the first!</div>
+      </div>
+      <div class="comments-input-area">
+        <textarea id="comment-input" placeholder="Write a comment..." rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendComment();}"></textarea>
+        <button class="btn-send-comment" onclick="sendComment()"><i class="ti ti-send"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TASK DETAIL MODAL -->
+<div class="modal-overlay" id="task-detail-modal">
+  <div class="modal task-detail-modal-inner">
+    <div class="task-detail-header">
+      <div class="task-detail-title-wrap">
+        <div class="task-detail-status" id="td-status-dot"></div>
+        <h3 id="td-title"></h3>
+      </div>
+      <button class="modal-close-btn" onclick="closeTaskDetail()"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="task-detail-body">
+      <div class="td-row">
+        <div class="td-label"><i class="ti ti-flag"></i> Priority</div>
+        <div id="td-priority" class="priority-badge"></div>
+      </div>
+      <div class="td-row">
+        <div class="td-label"><i class="ti ti-tag"></i> Category</div>
+        <div id="td-category" class="cat-badge"></div>
+      </div>
+      <div class="td-row" id="td-deadline-row">
+        <div class="td-label"><i class="ti ti-calendar"></i> Deadline</div>
+        <div id="td-deadline" class="td-value"></div>
+      </div>
+      <div class="td-row" id="td-hours-row">
+        <div class="td-label"><i class="ti ti-clock"></i> Start Date</div>
+        <div id="td-hours" class="td-value"></div>
+      </div>
+      <div class="td-row" id="td-notes-row">
+        <div class="td-label"><i class="ti ti-notes"></i> Notes</div>
+        <div id="td-notes" class="td-value td-notes-text"></div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeTaskDetail()">Close</button>
+      <button class="btn-save" id="td-edit-btn"><i class="ti ti-edit"></i> Edit</button>
+    </div>
+  </div>
+</div>
+
   <!-- Bottom Nav (mobile) -->
 <nav class="bottom-nav">
   <a href="dashboard.html"><i class="ti ti-layout-dashboard"></i> Home</a>
@@ -205,6 +296,7 @@
   <a href="schedule.html"><i class="ti ti-star"></i> Schedule</a>
    <a href="notes.html"><i class="ti ti-notebook"></i> Notes</a>
   <a href="analytics.html"><i class="ti ti-chart-bar"></i> Analytics</a>
+        <a href="shared-with-me.html"><i class="ti ti-share"></i> Shared with Me</a>
   <a href="settings.html"><i class="ti ti-settings"></i> Settings</a>
 </nav>
 <script>
@@ -228,5 +320,7 @@
 <script src="../scripts/pwa.js"></script>
 
   <script type="module" src="../scripts/tasks.js"></script>
+  <script type="module" src="../scripts/task-sharing.js"></script>
+  <script type="module" src="../scripts/task-comments.js"></script>
 </body>
 </html>
