@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TaskOra — Notes</title>
+  <meta name="theme-color" content="#1a2537">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="TaskOra">
+  <link rel="manifest" href="../manifest.json">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../styles/main.css">
+  <link rel="stylesheet" href="../styles/notes.css">
+  <link rel="stylesheet" href="../styles/darkmode.css">
+  <link rel="stylesheet" href="../styles/responsive.css">
+  <script src="../scripts/loader.js"></script>
+  <script src="../scripts/theme.js"></script>
+</head>
+<body>
+
+  <div id="loader"><div class="spinner"></div></div>
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <img src="../icons/Frame 7.png" class="logo-up" alt="taskora logo">
+    <div class="page-title">My Notes</div>
+    <div class="topbar-right">
+      <div class="notif-wrap">
+        <button class="notif-btn" id="notif-bell" onclick="toggleNotifDropdown()">
+          <i class="ti ti-bell"></i>
+          <span id="notif-badge">0</span>
+        </button>
+        <div class="notif-dropdown" id="notif-dropdown">
+          <div class="notif-dropdown-header">
+            <span>Notifications</span>
+            <button onclick="markAllRead()">Mark all read</button>
+          </div>
+          <div class="notif-list" id="notif-list">
+            <div class="notif-empty">No notifications yet</div>
+          </div>
+        </div>
+      </div>
+      <div class="avatar"><i class="ti ti-user"></i></div>
+    </div>
+  </div>
+
+  <div class="layout">
+    <!-- APP SIDEBAR (nav) -->
+    <aside class="sidebar">
+      <nav>
+        <a href="dashboard.html"><i class="ti ti-layout-dashboard"></i> Dashboard</a>
+        <a href="tasks.html"><i class="ti ti-checkbox"></i> Tasks</a>
+        
+        <a href="calendar.html"><i class="ti ti-calendar"></i> Calendar</a>
+        <a href="schedule.html"><i class="ti ti-star"></i> Schedule</a>
+        <a href="notes.html" class="active"><i class="ti ti-notebook"></i> Notes</a>
+        <a href="analytics.html"><i class="ti ti-chart-bar"></i> Analytics</a>
+      </nav>
+      <div class="sidebar-bottom">
+        <a href="settings.html"><i class="ti ti-settings"></i> Settings</a>
+        <a href="#"><i class="ti ti-help-circle"></i> Help Center</a>
+        <a href="#" id="logout-btn"><i class="ti ti-logout"></i> Sign out</a>
+      </div>
+      <div class="sidebar-footer">© 2026 — Archie L. Agui Jr.. All rights reserved.</div>
+    </aside>
+
+    <!-- NOTES SPLIT LAYOUT -->
+    <div class="notes-split">
+
+      <!-- LEFT: Notes List Panel -->
+      <div class="notes-panel" id="notes-panel">
+        <div class="np-header">
+          <div class="np-search-wrap">
+            <i class="ti ti-search"></i>
+            <input type="text" id="note-search" placeholder="Search notes...">
+          </div>
+          <button class="np-add-btn" onclick="openNoteModal()" title="New Note">
+            <i class="ti ti-square-rounded-plus"></i>
+          </button>
+        </div>
+
+        <div class="np-count" id="np-count">0 notes</div>
+
+        <div class="notes-list" id="notes-list">
+          <div class="notes-empty">
+            <i class="ti ti-notebook"></i>
+            <p>No notes yet</p>
+            <span>Tap + to create one</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: Note Detail Panel -->
+      <div class="note-detail" id="note-detail">
+        <div class="nd-empty">
+          <i class="ti ti-notebook" style="font-size:52px;color:#d0d8e8;display:block;margin-bottom:14px;"></i>
+          <p style="font-size:16px;font-weight:700;color:#8a9bb0;">Select a note</p>
+          <span style="font-size:13px;color:#a0aab8;">or create a new one</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ADD / EDIT NOTE MODAL -->
+  <div class="note-modal-overlay" id="note-modal">
+    <div class="note-modal">
+      <h3 id="note-modal-title">New Note</h3>
+      <div class="fld">
+        <label>Title</label>
+        <input type="text" id="n-title" placeholder="Note title...">
+      </div>
+      <div class="fld">
+        <label>Content</label>
+        <textarea id="n-body" rows="6" placeholder="Write your note here..."></textarea>
+      </div>
+      <div class="fld">
+        <label>Tag <span style="font-weight:400;color:#8a9bb0;">(optional)</span></label>
+        <input type="text" id="n-tag" placeholder="e.g. School, Ideas, Personal">
+      </div>
+      <div class="fld">
+        <label>Color</label>
+        <div class="color-picker-row" id="color-picker-row"></div>
+      </div>
+      <div class="note-modal-actions">
+        <button class="btn-cancel-note" onclick="closeNoteModal()">Cancel</button>
+        <button class="btn-save-note" onclick="saveNote()"><i class="ti ti-check"></i> Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOTTOM NAV (mobile) -->
+  <nav class="bottom-nav">
+    <a href="dashboard.html"><i class="ti ti-layout-dashboard"></i> Home</a>
+    <a href="tasks.html"><i class="ti ti-checkbox"></i> Tasks</a>
+    
+    <a href="calendar.html"><i class="ti ti-calendar"></i> Calendar</a>
+    <a href="schedule.html"><i class="ti ti-star"></i> Schedule</a>
+    <a href="notes.html" class="active"><i class="ti ti-notebook"></i> Notes</a>
+    <a href="analytics.html"><i class="ti ti-chart-bar"></i> Analytics</a>
+    <a href="settings.html"><i class="ti ti-settings"></i> Settings</a>
+  </nav>
+
+  <script>
+    function toggleNotifDropdown() {
+      document.getElementById("notif-dropdown").classList.toggle("open");
+    }
+    document.addEventListener("click", (e) => {
+      if (!e.target.closest(".notif-wrap")) {
+        document.getElementById("notif-dropdown")?.classList.remove("open");
+      }
+    });
+    async function markAllRead() {
+      const { db, auth } = await import("../scripts/firebase.js");
+      const { collection, getDocs, updateDoc, doc, query, where } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+      const user = auth.currentUser;
+      if (!user) return;
+      const snap = await getDocs(query(collection(db, "users", user.uid, "notifications"), where("read", "==", false)));
+      snap.forEach(d => updateDoc(doc(db, "users", user.uid, "notifications", d.id), { read: true }));
+    }
+  </script>
+  <script src="../scripts/pwa.js"></script>
+  <script type="module" src="../scripts/notes.js"></script>
+</body>
+</html> 

@@ -155,11 +155,23 @@
   align-items: start;
 }
 
+/* Kung "To Do" / "Deadline" / "Completed" ra ang filter,
+   1 column ra ipakita ─ pero dili mag-apekto sa mobile
+   media query (gi-handle ra ni sa desktop/tablet width). */
+.kanban.kanban-single {
+  grid-template-columns: 1fr;
+}
+
 .column {
   background: #f0f2f8;
   border-radius: 14px;
   padding: 16px;
   border: 1.5px solid #e0e4f0;
+}
+
+/* Itago ang column nga dili tugma sa pili nga filter */
+.column.col-hidden {
+  display: none;
 }
 
 .col-header {

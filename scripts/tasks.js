@@ -66,6 +66,35 @@ function buildCard(task) {
   </div>`;
 }
 
+// ── PAKITA RA ANG COLUMN(S) NGA PARAHA SA PILI NGA FILTER ──
+function applyColumnVisibility() {
+  const columns = {
+    todo: document.getElementById("col-todo")?.closest(".column"),
+    deadline: document.getElementById("col-deadline")?.closest(".column"),
+    completed: document.getElementById("col-completed")?.closest(".column")
+  };
+
+  const kanban = document.querySelector(".kanban");
+  if (kanban) kanban.classList.remove("kanban-single");
+
+  if (currentFilter === "all") {
+    Object.values(columns).forEach(c => c?.classList.remove("col-hidden"));
+    return;
+  }
+
+  const showKey = currentFilter === "todo" ? "todo"
+    : currentFilter === "deadline" ? "deadline"
+    : currentFilter === "completed" ? "completed"
+    : null;
+
+  Object.entries(columns).forEach(([key, col]) => {
+    if (!col) return;
+    col.classList.toggle("col-hidden", key !== showKey);
+  });
+
+  if (kanban) kanban.classList.add("kanban-single");
+}
+
 function renderTasks() {
   let tasks = [...allTasks];
 
@@ -91,6 +120,8 @@ function renderTasks() {
     deadline.length ? deadline.map(buildCard).join("") : `<div class="col-empty">No deadlines today</div>`;
   document.getElementById("col-completed").innerHTML =
     completed.length ? completed.map(buildCard).join("") : `<div class="col-empty">No completed tasks</div>`;
+
+  applyColumnVisibility();
 }
 
 function updateStats(tasks) {
