@@ -38,8 +38,22 @@ if ("serviceWorker" in navigator) {
 
 // Install prompt
 let deferredPrompt;
+
+function isStandalone() {
+  return window.matchMedia("(display-mode: standalone)").matches
+    || window.navigator.standalone === true; // iOS Safari
+}
+
+function showInstallBtn(show) {
+  document.querySelectorAll("#install-btn").forEach(btn => {
+    btn.style.display = show ? "flex" : "none";
+  });
+}
+
 window.addEventListener("beforeinstallprompt", (e) => {
+  e.preventDefault();
   deferredPrompt = e;
+  if (!isStandalone()) showInstallBtn(true);
 });
 
 window.installApp = async () => {
@@ -47,8 +61,10 @@ window.installApp = async () => {
   deferredPrompt.prompt();
   const { outcome } = await deferredPrompt.userChoice;
   deferredPrompt = null;
+  showInstallBtn(false);
 };
 
 window.addEventListener("appinstalled", () => {
-  console.log("TMAPP installed!");
+  console.log("TASKORA installed!");
+  showInstallBtn(false);
 });
