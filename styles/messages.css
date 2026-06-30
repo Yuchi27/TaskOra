@@ -603,7 +603,9 @@
   .msg-layout.chat-open .msg-sidebar { display: none; }
   .msg-layout.chat-open .msg-chat { display: flex; width: 100%; }
 
-  .msg-main { padding: 0 !important; }
+  /* Keep bottom-nav clearance so the chat input box isn't covered */
+  .msg-main { padding: 0 !important; padding-bottom: 64px !important; }
+  .chat-input-area { padding-bottom: calc(14px + env(safe-area-inset-bottom, 0px)); }
 }
 
 /* ── Dark mode ── */

@@ -569,7 +569,7 @@
   .note-detail {
     display: none;
     position: fixed;
-    inset: 62px 0 60px 0;
+    inset: 62px 0 64px 0;
     background: #fff;
     z-index: 90;
     overflow-y: auto;

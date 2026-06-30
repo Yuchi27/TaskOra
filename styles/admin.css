@@ -540,6 +540,7 @@
 
     .main{
         padding: 16px;
+        padding-bottom: 96px;
     }
 
     .ann-container{
@@ -567,6 +568,7 @@
 
     .main{
         padding: 16px;
+        padding-bottom: 96px;
     }
 
     .top-row{
