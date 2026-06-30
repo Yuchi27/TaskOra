@@ -493,6 +493,10 @@
 
 
 @media (max-width: 768px){
+    .chat-send-btn,
+    .chat-input{
+      margin-bottom: 40px;
+    }
 
     .top-actions{
         display: grid;
