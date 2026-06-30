@@ -1,9 +1,12 @@
-import { auth, db } from "./firebase.js";
+import { auth, db, storage } from "./firebase.js";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import {
   collection, query, orderBy, onSnapshot,
   addDoc, updateDoc, deleteDoc, doc, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import {
+  ref as storageRef, uploadBytesResumable, getDownloadURL, deleteObject
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 
 let allNotes = [];
 let allTasks = [];
@@ -233,6 +236,18 @@ function openBlankTaskEditor(taskId) {
             placeholder="Add tag..." oninput="scheduleBlankSave('${taskId}')" />
         </div>
         <div class="nd-edit-colors" id="nd-edit-colors"></div>
+        <div class="nd-attachments-section">
+          <div class="nd-att-bar">
+            <span class="nd-att-label"><i class="ti ti-paperclip"></i> Attachments</span>
+            <div class="nd-att-btns">
+              <button class="nd-att-add-btn" onclick="triggerAttachImage()"><i class="ti ti-photo"></i> Image</button>
+              <button class="nd-att-add-btn" onclick="triggerAttachFile()"><i class="ti ti-file-plus"></i> File</button>
+            </div>
+          </div>
+          <input type="file" id="nd-image-input" style="display:none" accept="image/*" onchange="handleAttachFile(this)">
+          <input type="file" id="nd-file-input" style="display:none" onchange="handleAttachFile(this)">
+          <div id="nd-attachments"></div>
+        </div>
         <div class="nd-vertical-resizer" id="nd-vertical-resizer"></div>
         <textarea class="nd-edit-text" id="nd-edit-text" placeholder="Write something..."
           oninput="autoResizeTA(this);scheduleBlankSave('${taskId}')"></textarea>
@@ -358,6 +373,18 @@ window.startInlineEdit = (id) => {
             oninput="scheduleAutosave()" />
         </div>
         <div class="nd-edit-colors" id="nd-edit-colors"></div>
+        <div class="nd-attachments-section">
+          <div class="nd-att-bar">
+            <span class="nd-att-label"><i class="ti ti-paperclip"></i> Attachments</span>
+            <div class="nd-att-btns">
+              <button class="nd-att-add-btn" onclick="triggerAttachImage()"><i class="ti ti-photo"></i> Image</button>
+              <button class="nd-att-add-btn" onclick="triggerAttachFile()"><i class="ti ti-file-plus"></i> File</button>
+            </div>
+          </div>
+          <input type="file" id="nd-image-input" style="display:none" accept="image/*" onchange="handleAttachFile(this)">
+          <input type="file" id="nd-file-input" style="display:none" onchange="handleAttachFile(this)">
+          <div id="nd-attachments"></div>
+        </div>
         <div class="nd-vertical-resizer" id="nd-vertical-resizer"></div>
         <textarea class="nd-edit-text" id="nd-edit-text" placeholder="Write something..."
           oninput="autoResizeTA(this);scheduleAutosave()"
@@ -372,6 +399,139 @@ window.startInlineEdit = (id) => {
   buildInlineColorPicker();
   const ta = document.getElementById("nd-edit-text");
   autoResizeTA(ta);
+  renderAttachments(note.attachments || []);
+};
+
+/* ══════════════════════════════════════
+   ATTACHMENTS
+   ══════════════════════════════════════ */
+
+function formatFileSize(bytes) {
+  if (bytes < 1024) return bytes + " B";
+  if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
+  return (bytes / (1024 * 1024)).toFixed(1) + " MB";
+}
+
+function fileIcon(type) {
+  if (type.startsWith("image/")) return "ti-photo";
+  if (type.includes("pdf"))       return "ti-file-type-pdf";
+  if (type.includes("word") || type.includes("document")) return "ti-file-type-doc";
+  if (type.includes("sheet") || type.includes("excel"))   return "ti-file-type-xls";
+  if (type.includes("zip") || type.includes("rar"))       return "ti-file-zip";
+  return "ti-file";
+}
+
+function renderAttachments(attachments = []) {
+  const container = document.getElementById("nd-attachments");
+  if (!container) return;
+  if (!attachments.length) { container.innerHTML = ""; return; }
+
+  const images = attachments.filter(a => (a.type || "").startsWith("image/"));
+  const files  = attachments.filter(a => !(a.type || "").startsWith("image/"));
+
+  let html = "";
+
+  if (images.length) {
+    html += `<div class="nd-att-images">` + images.map((a, i) => {
+      const idx = attachments.indexOf(a);
+      return `
+        <div class="nd-att-img-wrap">
+          <a href="${a.url}" target="_blank" rel="noopener">
+            <img src="${a.url}" alt="${esc(a.name)}" class="nd-att-img-thumb">
+          </a>
+          <button class="nd-att-img-del" onclick="deleteAttachment(${idx})" title="Remove">
+            <i class="ti ti-x"></i>
+          </button>
+          <span class="nd-att-img-name">${esc(a.name)}</span>
+        </div>`;
+    }).join("") + `</div>`;
+  }
+
+  if (files.length) {
+    html += files.map((a) => {
+      const idx = attachments.indexOf(a);
+      return `
+        <div class="nd-attachment-item">
+          <i class="ti ${fileIcon(a.type || "")} nd-att-icon"></i>
+          <div class="nd-att-info">
+            <a class="nd-att-name" href="${a.url}" target="_blank" rel="noopener">${esc(a.name)}</a>
+            <span class="nd-att-size">${formatFileSize(a.size || 0)}</span>
+          </div>
+          <button class="nd-att-del" onclick="deleteAttachment(${idx})" title="Remove">
+            <i class="ti ti-x"></i>
+          </button>
+        </div>`;
+    }).join("");
+  }
+
+  container.innerHTML = html;
+}
+
+window.triggerAttachFile = () => {
+  document.getElementById("nd-file-input")?.click();
+};
+
+window.triggerAttachImage = () => {
+  document.getElementById("nd-image-input")?.click();
+};
+
+window.handleAttachFile = async (input) => {
+  const file = input.files[0];
+  if (!file || !editingNoteId || !currentUser) return;
+
+  const MAX = 10 * 1024 * 1024; // 10 MB limit
+  if (file.size > MAX) { alert("File too large (max 10 MB)."); return; }
+
+  const label = document.getElementById("nd-autosave-label");
+  if (label) label.textContent = "Uploading...";
+
+  const path = `notes/${currentUser.uid}/${editingNoteId}/${Date.now()}_${file.name}`;
+  const sRef  = storageRef(storage, path);
+  const task  = uploadBytesResumable(sRef, file);
+
+  task.on("state_changed", null, (err) => {
+    console.error(err);
+    if (label) label.textContent = "Upload failed";
+  }, async () => {
+    const url = await getDownloadURL(task.snapshot.ref);
+    const note = allNotes.find(n => n.id === editingNoteId);
+    const existing = note?.attachments || [];
+    const updated = [...existing, {
+      name: file.name,
+      size: file.size,
+      type: file.type,
+      url,
+      path
+    }];
+    await updateDoc(doc(db, "users", currentUser.uid, "notes", editingNoteId), {
+      attachments: updated,
+      updatedAt: serverTimestamp()
+    });
+    if (label) {
+      label.textContent = "Saved";
+      setTimeout(() => { if (label) label.textContent = ""; }, 1500);
+    }
+    renderAttachments(updated);
+  });
+
+  input.value = "";
+};
+
+window.deleteAttachment = async (idx) => {
+  if (!editingNoteId || !currentUser) return;
+  const note = allNotes.find(n => n.id === editingNoteId);
+  if (!note?.attachments) return;
+  const att = note.attachments[idx];
+  if (!confirm(`Remove "${att.name}"?`)) return;
+  try {
+    await deleteObject(storageRef(storage, att.path));
+  } catch (e) { /* file may already be gone */ }
+  const updated = note.attachments.filter((_, i) => i !== idx);
+  await updateDoc(doc(db, "users", currentUser.uid, "notes", editingNoteId), {
+    attachments: updated,
+    updatedAt: serverTimestamp()
+  });
+  renderAttachments(updated);
 };
 
 window.autoResizeTA = (el) => {

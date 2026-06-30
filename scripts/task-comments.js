@@ -98,12 +98,20 @@ export async function sendComment() {
   const user = auth.currentUser;
   const ref  = collection(db, "users", currentCommentOwnerUid, "tasks", currentCommentTaskId, "comments");
 
+  // Get photoURL from Firestore (not Firebase Auth) since we store it there
+  let authorPhoto = null;
+  try {
+    const { getDoc, doc: fsDoc } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+    const snap = await getDoc(fsDoc(db, "users", user.uid));
+    authorPhoto = snap.exists() ? (snap.data().photoURL || null) : null;
+  } catch (e) { /* ignore */ }
+
   try {
     await addDoc(ref, {
       text,
       authorUid:   user.uid,
       authorName:  user.displayName || user.email?.split("@")[0] || "User",
-      authorPhoto: user.photoURL || null,
+      authorPhoto,
       reactions:   {},
       createdAt:   serverTimestamp()
     });
