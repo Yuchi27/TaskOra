@@ -65,6 +65,6 @@ window.installApp = async () => {
 };
 
 window.addEventListener("appinstalled", () => {
-  console.log("TASKORA installed!");
+  console.log("TMAPP installed!");
   showInstallBtn(false);
 });
